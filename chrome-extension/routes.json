@@ -1,0 +1,16 @@
+[{
+    "id": 2,
+    "priority": 1,
+    "action": {
+        "type": "redirect",
+        "redirect": {
+            "regexSubstitution": "ENV.WORKER_URL/get/\\1"
+        }
+    },
+    "condition": {
+        "regexFilter": "^(?:https?://)?go/(.+)$",
+        "resourceTypes": [
+            "main_frame"
+        ]
+    }
+}]

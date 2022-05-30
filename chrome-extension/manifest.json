@@ -1,0 +1,18 @@
+{
+    "name": "Quick Links",
+    "version": "1.0",
+    "manifest_version": 2,
+    "permissions": [
+        "*://go/*",
+        "declaritiveNetRequest",
+        "declarativeNetRequestWithHostAccess"
+    ],
+    "declarative_net_request": {
+        "rule_resources": [{
+            "id": "go_links",
+            "enabled": true,
+            "path": "routes.json"
+        }]
+    },
+    "action": {}
+}

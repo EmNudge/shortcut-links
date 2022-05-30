@@ -1,0 +1,7 @@
+name = "link"
+main = "src/index.ts"
+compatibility_date = "2022-05-30"
+
+kv_namespaces = [
+  { binding = "REDIRECTS", id = "ENV.WORKER_ID", preview_id = "ENV.WORKER_PREVIEW_ID" },
+]
