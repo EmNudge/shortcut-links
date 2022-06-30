@@ -18,24 +18,23 @@
 		$modalModeSt = { type: 'closed' };
 
 		const oldLink = link;
-		linksSt.update(links => {
-			return links.filter(link => link.name !== oldLink.name);
-		})
+		linksSt.update((links) => {
+			return links.filter((link) => link.name !== oldLink.name);
+		});
 	};
 </script>
 
 {#if link}
-	<Base on:close={() => dispatch('close')}>
-		<h1>Delete Link?</h1>
-
+	<Base title="Delete Link?" on:close={() => dispatch('close')}>
 		<div>
-			<h2>
-				name: <strong>{link.name}</strong>
-			</h2>
-			<h2>
-				url: <strong>{link.url}</strong>
-			</h2>
+			<span>name</span>
+			<h2>{link.name}</h2>
+			<br>
+			<span>url</span>
+			<h2>{link.url}</h2>
 		</div>
+		<br>
+		<br>
 		<div>
 			<button type="button" on:click={handleDelete}>Delete Link</button>
 		</div>
@@ -44,16 +43,16 @@
 
 <style>
 	div {
-		padding: 10px;
-		margin: 20px 0;
 		display: grid;
 		justify-content: center;
 	}
 	button {
 		background: #c84848;
 		color: white;
-		padding: 10px;
+		padding: 10px 80px;
 		cursor: pointer;
 		box-shadow: var(--box-shadow);
+		border: none;
+		border-radius: 5px;
 	}
 </style>

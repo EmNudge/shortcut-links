@@ -47,13 +47,19 @@
 </script>
 
 {#if link}
-	<Base on:close={() => dispatch('close')}>
-		<h1>{link ? 'New' : 'Edit'} Link</h1>
-		<br />
+	<Base title="{link.name ? 'Edit' : 'New'} Link" on:close={() => dispatch('close')}>
 		<form on:submit|preventDefault={handleSubmit}>
-			<input type="text" placeholder="name..." bind:value={name} />
-			<input type="text" placeholder="url..." bind:value={url} />
-			<button type="submit">Update Link</button>
+			<label>
+				<span>Name</span>
+				<input type="text" placeholder="name..." bind:value={name} />
+			</label>
+			<label>
+				<span>URL</span>
+				<input type="text" placeholder="url..." bind:value={url} />
+			</label>
+			<br>
+			<br>
+			<button type="submit" disabled={name === link.name && url == link.url}>Update Link</button>
 			<div class="error">
 				{error}
 			</div>
@@ -66,6 +72,11 @@
 		display: grid;
 		grid-gap: 10px;
 	}
+	label {
+		display: grid;
+		grid-gap: 10px;
+		margin-bottom: 10px;
+	}
 	input {
 		box-shadow: var(--box-shadow);
 		border: none;
@@ -74,11 +85,15 @@
 		border-radius: 5px;
 	}
 	button {
-		background: white;
-		border: 1px solid #0005;
+		background: #8be799;
+		border: none;
+		border-radius: 5px;
 		padding: 10px;
 		cursor: pointer;
 		box-shadow: var(--box-shadow);
+	}
+	button:disabled {
+		cursor: auto;
 	}
 	.error {
 		color: red;
