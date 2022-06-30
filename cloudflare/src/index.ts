@@ -1,4 +1,4 @@
-import { getAllLinks, getLink, updateLink } from "./utils";
+import { getAllLinks, getLink, updateLink, deleteLink } from "./utils";
 
 export interface Env {
   REDIRECTS: KVNamespace;
@@ -14,10 +14,17 @@ export default {
 
     if (request.method === 'POST') {
       // update a link with /set/[name]
-      const match = reqUrl.pathname.match(/^\/set(?:\/(.+))?/); 
-      if (!match) return new Response("malformed data", { status: 400 });
-  
-      return updateLink(env.REDIRECTS, match[1], request);
+      const setMatch = reqUrl.pathname.match(/^\/set(?:\/(.+)?)?/); 
+      if (setMatch) {
+        return updateLink(env.REDIRECTS, setMatch[1], request);
+      }
+
+      const deleteMatch = reqUrl.pathname.match(/^\/delete(?:\/(.+)?)?/); 
+      if (deleteMatch) {
+        return deleteLink(env.REDIRECTS, deleteMatch[1], request);
+      }
+
+      return new Response("malformed data", { status: 400 });
     } 
     
     if (request.method === 'GET') {

@@ -3,11 +3,31 @@ export interface Link {
   url: string;
 }
 
-export async function updateLink(redirects: KVNamespace, name: string, request: Request) {
-  const { url, name: jsonName } = await request.json();
-  await redirects.put(name ?? jsonName, url);
+export async function updateLink(redirects: KVNamespace, oldName: string, request: Request) {
+  const { url, name } = await request.json();
+
+  const promises = [];
+  if (oldName !== name) {
+    promises.push(redirects.delete(oldName));
+  }
+  promises.push(redirects.put(name, url));
+
+  await Promise.all(promises);
 
   return new Response(`successfully set "${name}" to "${url}"`, {
+    headers: {
+      'Content-Type': 'text/plain',
+      'Access-Control-Allow-Origin': '*',
+    },
+    status: 200,
+  });
+}
+
+export async function deleteLink(redirects: KVNamespace, name: string, request: Request) {
+  const { name: jsonName } = await request.json();
+  await redirects.delete(name ?? jsonName);
+
+  return new Response(`successfully deleted "${name}"`, {
     headers: {
       'Content-Type': 'text/plain',
       'Access-Control-Allow-Origin': '*',
