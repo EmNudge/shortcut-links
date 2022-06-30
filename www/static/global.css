@@ -1,0 +1,28 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+:root {
+    --box-shadow: 0px 3px 4px #b3b3b3;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-items: center;
+    grid-gap: 20px;
+    height: 100%;
+
+    padding-top: 40px;
+    font-family: monospace;
+    max-height: 100vh;
+
+    background: #EDEDED;
+    color: #323232;
+}
+
+a {
+    color: #2989A8;
+    text-decoration: none;
+}

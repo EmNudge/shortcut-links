@@ -10,6 +10,9 @@ Use KV to store any `POST` at `/set/<NAME>` with a body of `{ "url": "<URL>" }`.
 
 Redirect to new URL on `GET` to `/get/<NAME>`.
 
+## Link Viewer:
+Sveltekit app to view links, edit, and delete them.
+
 ## Setup
 Either edit places with `ENV.<NAME>` to your own values or:
 
