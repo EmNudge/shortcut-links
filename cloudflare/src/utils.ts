@@ -4,30 +4,16 @@ export interface Link {
 }
 
 export async function updateLink(redirects: KVNamespace, name: string, request: Request) {
-  if (!name) {
-    const isForm = request.headers.get('Content-Type')?.includes('form');
-    if (!isForm) {
-      return new Response("malformed data: no name to edit", { status: 400 });
-    }
+  const { url, name: jsonName } = await request.json();
+  await redirects.put(name ?? jsonName, url);
 
-    const body = await request.formData();
-    const { name, url } = Object.fromEntries(body) as Record<string, string>;
-    await redirects.put(name, url);
-
-    const links = await getAllLinks(redirects);
-    const newLinks = links.map(link => link.name === name ? { name, url } : link)
-    return new Response(JSON.stringify(newLinks), {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Access-Control-Allow-Origin': '*',
-      }
-    });
-  }
-
-  const { url } = await request.json();
-  await redirects.put(name, url);
-
-  return new Response(`successfully set "${name}" to "${url}"`);
+  return new Response(`successfully set "${name}" to "${url}"`, {
+    headers: {
+      'Content-Type': 'text/plain',
+      'Access-Control-Allow-Origin': '*',
+    },
+    status: 200,
+  });
 }
 
 export async function getLink(redirects: KVNamespace, name: string) {

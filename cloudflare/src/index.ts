@@ -26,7 +26,7 @@ export default {
         const links = await getAllLinks(env.REDIRECTS);
         return new Response(JSON.stringify(links), {
           headers: {
-            'Content-Type': 'text/javascript',
+            'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
           }
         });
