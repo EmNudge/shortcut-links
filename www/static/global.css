@@ -5,20 +5,13 @@
 
 :root {
     --box-shadow: 0px 3px 4px #b3b3b3;
+    --bg: #EDEDED;
 }
 
 body {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    justify-items: center;
-    grid-gap: 20px;
-    height: 100%;
-
-    padding-top: 40px;
     font-family: monospace;
-    max-height: 100vh;
-
-    background: #EDEDED;
+    min-height: 100vh;
+    background: var(--bg);
     color: #323232;
 }
 

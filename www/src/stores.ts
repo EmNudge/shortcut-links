@@ -12,5 +12,5 @@ type Closed = { type: 'closed' };
 export type ModalMode = EditModal | CreateModal | DeleteModal | Closed;
 
 export const modalModeSt = writable<ModalMode>({ type: 'closed' });
-
+export const searchSt = writable('');
 export const linksSt = writable<Link[]>([]);

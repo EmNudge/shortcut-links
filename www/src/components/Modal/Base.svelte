@@ -38,7 +38,7 @@
 		height: 100%;
 
 		background: #0005;
-		z-index: 2;
+		z-index: 10;
 		backdrop-filter: blur(2px);
 		animation: forwards .25s blur-in;
 	}
