@@ -1,16 +1,12 @@
 # Shortcut Links
 
-This is a combination of both a chrome extension and a cloudflare worker
+This is a combination of both a cloudflare worker, frontend app, and a chrome extension
 
 ## Chrome Extension:
 Forward any request from `go/<NAME>` to `<YOUR_SITE>/<NAME>` using a `declaritiveNetRequest`. 
 
 ## Cloudflare Worker:
-Use KV to store any `POST` at `/set/<NAME>` with a body of `{ "name": "<NAME>", "url": "<URL>" }`.
-The same endpoint is used to both create new links and update old ones. If the URL doesn't contain a name or the name is the same between body and URL, this is a create request. If the URL name differs, this is an update request.
-`PUT` might be better to make the distinction clearer, but eh.
-
-Redirect to new URL on `GET` to `/get/<NAME>`.
+Use KV store to manage links.
 
 ## Link Viewer:
 Sveltekit app to view links, edit, and delete them.
