@@ -3,9 +3,20 @@ export interface Link {
   url: string;
 }
 
-export async function updateLink(redirects: KVNamespace, oldName: string, request: Request) {
-  const { url, name } = await request.json();
+export async function createLink(redirects: KVNamespace, name: string, url: string) {
+  const link = { name, url };
+  await redirects.put(name, url);
 
+  return new Response(`successfully created link "${name}" with URL "${url}"`, {
+    headers: {
+      'Content-Type': 'text/plain',
+      'Access-Control-Allow-Origin': '*',
+    }, 
+    status: 200,
+  });
+}
+
+export async function updateLink(redirects: KVNamespace, oldName: string, { url, name }: Link) {
   const promises = [];
   if (oldName !== name) {
     promises.push(redirects.delete(oldName));
@@ -23,9 +34,8 @@ export async function updateLink(redirects: KVNamespace, oldName: string, reques
   });
 }
 
-export async function deleteLink(redirects: KVNamespace, name: string, request: Request) {
-  const { name: jsonName } = await request.json();
-  await redirects.delete(name ?? jsonName);
+export async function deleteLink(redirects: KVNamespace, name: string) {
+  await redirects.delete(name);
 
   return new Response(`successfully deleted "${name}"`, {
     headers: {

@@ -1,8 +1,39 @@
-import { getAllLinks, getLink, updateLink, deleteLink } from "./utils";
+import { getAllLinks, getLink, updateLink, deleteLink, createLink, Link } from "./utils";
+import { Router } from './router';
 
 export interface Env {
   REDIRECTS: KVNamespace;
 }
+
+const router = new Router(true);
+
+router.get('/', async (_request, env) => {
+  const links = await getAllLinks(env.REDIRECTS);
+
+  return new Response(JSON.stringify(links), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    }
+  });
+});
+
+router.get('/:name', (_request, env, groups) => {
+  return getLink(env.REDIRECTS, groups.name)
+});
+
+router.post('/:name', async (request, env, groups) => {
+  const link = await request.json() as { url: string };
+  return createLink(env.REDIRECTS, groups.name, link.url);
+});
+
+router.put('/:name', async (request, env, groups) => {
+  return updateLink(env.REDIRECTS, groups.name, await request.json() as Link);
+});
+
+router.delete('/:name', async (_request, env, groups) => {
+  return deleteLink(env.REDIRECTS, groups.name);
+});
 
 export default {
   async fetch(
@@ -10,42 +41,6 @@ export default {
     env: Env,
     _ctx: ExecutionContext
   ): Promise<Response> {
-    const reqUrl = new URL(request.url);
-
-    if (request.method === 'POST') {
-      // update a link with /set/[name]
-      const setMatch = reqUrl.pathname.match(/^\/set(?:\/(.+)?)?/); 
-      if (setMatch) {
-        return updateLink(env.REDIRECTS, setMatch[1], request);
-      }
-
-      const deleteMatch = reqUrl.pathname.match(/^\/delete(?:\/(.+)?)?/); 
-      if (deleteMatch) {
-        return deleteLink(env.REDIRECTS, deleteMatch[1], request);
-      }
-
-      return new Response("malformed data", { status: 400 });
-    } 
-    
-    if (request.method === 'GET') {
-      // return all links
-      if (reqUrl.pathname === '/') {
-        const links = await getAllLinks(env.REDIRECTS);
-        return new Response(JSON.stringify(links), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          }
-        });
-      }
-
-      // redirect to specific URL with /get/[name]
-      const match = reqUrl.pathname.match(/^\/get\/(.+)/);
-      if (!match) return new Response("malformed data: " + reqUrl.pathname, { status: 400 });
-  
-      return getLink(env.REDIRECTS, match[1])
-    }
-  
-    return new Response("request type not supported", { status: 400 });
-  },
-};
+    return router.process(request, env);
+  }
+}

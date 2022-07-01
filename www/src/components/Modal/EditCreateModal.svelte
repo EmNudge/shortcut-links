@@ -28,14 +28,22 @@
 		error = newUrl ? '' : 'invalid URL';
 		if (error || !newUrl) return;
 		
+		const isUpdate = Boolean(link.name);
 		const oldLink = link;
 		const newLink = { url: newUrl.toString(), name };
 		console.log(`setting "${name}" to`, newLink);
 
-		await fetch(new URL(`set/${name}`, workerURL), {
-			method: 'POST',
-			body: JSON.stringify(newLink)
-		});
+		if (isUpdate) {
+			await fetch(new URL(name, workerURL), {
+				method: 'PUT',
+				body: JSON.stringify(newLink)
+			});
+		} else {
+			await fetch(new URL(link.name, workerURL), {
+				method: 'POST',
+				body: JSON.stringify(newLink)
+			});
+		}
 		$modalModeSt = { type: 'closed' };
 
 		linksSt.update(links => {
