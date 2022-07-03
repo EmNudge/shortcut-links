@@ -4,9 +4,13 @@
 	import { workerURL } from '../variables';
 	import Modal from '../components/Modal/index.svelte';
 	import { linksSt, searchSt } from '../stores';
+	import { handleAuth } from '../utils/handleAuth';
+	import { onMount } from 'svelte';
 
 	const linksFetch = fetch(workerURL).then((res) => res.json());
     linksFetch.then(data => linksSt.set(data));
+
+	onMount(handleAuth);
 </script>
 
 <Modal />
