@@ -1,30 +1,41 @@
 import { Env } from './index';
 
+type Middleware = (request: Request, env: Env, next: () => Promise<Response>) => Promise<Response>;
 type RouteFunc = (request: Request, env: Env, groups: Record<string, string>) => Promise<Response>;
 type RouteGuard = { pattern: URLPattern, func: RouteFunc };
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS';
 
 export class Router {
-    guards: Map<HttpMethod, RouteGuard[]> = new Map();
-    enabledCors = false;
+    #guards: Map<HttpMethod, RouteGuard[]> = new Map();
+    #middleware: Middleware[] = [];
 
-    constructor(enableCors?: boolean) {
-        this.enabledCors = Boolean(enableCors);
+    constructor() {}
+
+    use(middleware: Middleware) {
+        this.#middleware.push(middleware);
+    }
+
+    async runMiddleware(request: Request, env: Env) {
+        for (const middleware of this.#middleware) {
+            let allowContinue = false;
+            let resolve: (value: Response) => void;
+            const promise = new Promise<Response>((res) => resolve = res);
+
+            const response = await middleware(request, env, () => {
+                allowContinue = true;
+                return promise;
+            });
+            if (!allowContinue) return response;
+            resolve!(new Response(null, { status: 400 }));
+        }
     }
 
     async process(request: Request, env: Env): Promise<Response> {
         const method = request.method.toUpperCase() as HttpMethod;
-        if (method === 'OPTIONS' && this.enabledCors) {
-            return new Response(null, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-                    "Access-Control-Allow-Headers": "Content-Type",
-                }
-            });
-        }
 
-        const guards = this.guards.get(method);
+        this.runMiddleware(request, env);
+
+        const guards = this.#guards.get(method);
         if (!guards) return new Response('malformed URL', { status: 400 });
 
         const { pathname } = new URL(request.url);
@@ -40,10 +51,10 @@ export class Router {
 
     addRoute(pathname: string, func: RouteFunc, method: HttpMethod) {
         const pattern = new URLPattern({ pathname });
-        let guards = this.guards.get(method);
+        let guards = this.#guards.get(method);
         if (!guards) {
             guards = [];
-            this.guards.set(method, guards);
+            this.#guards.set(method, guards);
         }
         guards.push({ pattern, func });
     }
@@ -51,7 +62,6 @@ export class Router {
     get(pathname: string, func: RouteFunc) {
         this.addRoute(pathname, func, 'GET');
     }
-
     post(pathname: string, func: RouteFunc) {
         this.addRoute(pathname, func, 'POST');
     }

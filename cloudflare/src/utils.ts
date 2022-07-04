@@ -60,3 +60,22 @@ export async function getAllLinks(redirects: KVNamespace): Promise<Link[]> {
 
   return names.map((name, i) => ({ name, url: values[i] })) as Link[];
 }
+
+export async function getUserLoginResponse(code: string, clientId: string, clientSecret: string) {
+  return fetch(
+    'https://github.com/login/oauth/access_token',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'cloudflare-worker-links',
+        accept: 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code
+      }),
+    }
+  );
+}

@@ -1,4 +1,4 @@
-import { getAllLinks, getLink, updateLink, deleteLink, createLink, Link } from './utils';
+import { getAllLinks, getLink, updateLink, deleteLink, createLink, Link, getUserLoginResponse } from './utils';
 import { Router } from './router';
 
 export interface Env {
@@ -7,7 +7,22 @@ export interface Env {
   GITHUB_CLIENT_SECRET: string;
 }
 
-const router = new Router(true);
+const router = new Router();
+
+// enable CORS
+router.use(async (request, _env, next) => {
+  if (request.method.toUpperCase() === 'OPTIONS') {
+    return new Response(null, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      }
+    });
+  }
+
+  return next();
+});
 
 router.get('/', async (_request, env) => {
   const links = await getAllLinks(env.REDIRECTS);
@@ -27,24 +42,7 @@ router.get('/_oauth', async (_request, env) => {
 router.post('/_oauth', async (request, env) => {
   const { code } = await request.json();
 
-  const response = await fetch(
-    'https://github.com/login/oauth/access_token',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'cloudflare-worker-links',
-        accept: 'application/json',
-      },
-      body: JSON.stringify({
-        client_id: env.GITHUB_CLIENT_ID,
-        client_secret: env.GITHUB_CLIENT_SECRET,
-        code
-      }),
-    }
-  );
-
-  if (!response.ok) return new Response('error', { status: 500 });
+  const response = await getUserLoginResponse(code, env.GITHUB_CLIENT_ID, env.GITHUB_CLIENT_SECRET);
 
   return new Response(await response.text(), {
     status: 200,
