@@ -1,12 +1,15 @@
 import { parse as parseArgs } from 'https://deno.land/std@0.134.0/flags/mod.ts';
 
-const { dev, development, rev, reverse } = parseArgs(Deno.args);
+const userArgs = parseArgs(Deno.args);
+const DEVELOPMENT_MODE = userArgs.development || userArgs.dev;
+const REVERSE_REPLACE = userArgs.reverse || userArgs.rev;
+const GIT_DISABLE = userArgs.git;
 
 
 const REPLACE_FILES = [
     './cloudflare/wrangler.toml',
     './chrome-extension/routes.json',
-    './www/.env' + (dev || development ? '.development' : ''),
+    './www/.env' + (DEVELOPMENT_MODE ? '.development' : ''),
 ];
 
 
@@ -27,10 +30,10 @@ const getReplaceMap = (env: Map<string, string>, rev = false) => {
     return new Map(newEntries);
 };
 
-const envFileName = dev || development ? '.env.development' : '.env';
+const envFileName = DEVELOPMENT_MODE ? '.env.development' : '.env';
 
 const envVars = parseEnv(await Deno.readTextFile(envFileName))
-const replaceMap = getReplaceMap(envVars, rev || reverse);
+const replaceMap = getReplaceMap(envVars, REVERSE_REPLACE);
 
 const replaces = REPLACE_FILES.map(async filePath => {
     let text = await Deno.readTextFile(filePath);
@@ -42,4 +45,9 @@ const replaces = REPLACE_FILES.map(async filePath => {
 })
 await Promise.all(replaces);
 
-console.log(`successfully ${rev || reverse ? 'removed' : 'wrote'} env variables!`);
+const run = (cmd: string) => Deno.run({ cmd: cmd.split(/\s+/), stdout: 'null' });
+if (GIT_DISABLE) {
+    run('git update-index --assume-unchanged cloudflare/wrangler.toml chrome-extension/routes.json');
+}
+
+console.log(`successfully ${REVERSE_REPLACE ? 'removed' : 'wrote'} env variables!`);
