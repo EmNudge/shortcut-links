@@ -17,5 +17,5 @@ export const modalModeSt = writable<ModalMode>({ type: 'closed' });
 
 export const searchSt = writable('');
 
-type User = { name: string, login: string } | undefined
+export type User = { name: string, login: string } | undefined
 export const userSt = writable<User>();
