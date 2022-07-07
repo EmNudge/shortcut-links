@@ -32,7 +32,7 @@ export const getCreateNewLinkResponse: RouteFunc = async (request, env, groups) 
   if (!credentialedHeaders) return new Response('origin not allowed', { status: 401 });
 
   const login = await checkAuthorization(request, env);
-  if (!login) return new Response('not authorized', { status: 401 });
+  if (!login) return new Response('not authorized', { status: 401, headers: credentialedHeaders });
 
   const { name } = groups;
   const { url } = await request.json() as { url: string };
@@ -42,7 +42,7 @@ export const getCreateNewLinkResponse: RouteFunc = async (request, env, groups) 
     headers: {
       'Content-Type': 'text/plain',
       ...credentialedHeaders,
-    }, 
+    },
     status: 201,
   });
 }
@@ -52,7 +52,7 @@ export const getUpdateLinkResponse: RouteFunc = async (request, env, groups) => 
   if (!credentialedHeaders) return new Response('origin not allowed', { status: 401 });
 
   const login = await checkAuthorization(request, env);
-  if (!login) return new Response('not authorized', { status: 401 });
+  if (!login) return new Response('not authorized', { status: 401, headers: credentialedHeaders });
 
   const { name, url } = await request.json() as Link;
   await updateLink(env.REDIRECTS, groups.name, { name, url });
@@ -71,7 +71,7 @@ export const getDeleteLinkResponse: RouteFunc = async (request, env, groups) => 
   if (!credentialedHeaders) return new Response('origin not allowed', { status: 401 });
 
   const login = await checkAuthorization(request, env);
-  if (!login) return new Response('not authorized', { status: 401 });
+  if (!login) return new Response('not authorized', { status: 401, headers: credentialedHeaders });
 
   const { name } = groups;
   await env.REDIRECTS.delete(name);
@@ -103,7 +103,7 @@ export const getAccessTokenCORSResponse: RouteFunc = async (request, env) => {
     status: 200,
     headers: {
       'Type': 'application/json',
-      'Set-Cookie': `access_token=${access_token}; HttpOnly; SameSite=Lax`,
+      'Set-Cookie': `access_token=${access_token}; HttpOnly; Secure; SameSite=None`,
       ...credentialedHeaders,
     },
   });

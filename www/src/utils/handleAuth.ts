@@ -1,3 +1,4 @@
+import { workerURL } from "../variables";
 import { userSt } from "../stores";
 
 interface UserProfile {
@@ -51,7 +52,7 @@ export async function handleAuth() {
     history.pushState({}, "", newUrl);
 
     // retrieve access token
-    const workerResponse = await fetch('http://localhost:8787/_oauth', {
+    const workerResponse = await fetch(new URL('_oauth', workerURL), {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
