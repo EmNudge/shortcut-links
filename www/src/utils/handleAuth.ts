@@ -1,11 +1,5 @@
 import { userSt } from "../stores";
 
-interface AccessTokenObject {
-    access_token: string,
-    scope: string,
-    token_type: string
-}
-
 interface UserProfile {
     login: string,
     id: number,
@@ -41,6 +35,10 @@ interface UserProfile {
     updated_at: string
 }
 
+interface AccessTokenObject {
+    access_token: string,
+}
+
 export async function handleAuth() {
     const params = new URLSearchParams(location.search);
     const code = params.get('code');
@@ -56,17 +54,18 @@ export async function handleAuth() {
     const workerResponse = await fetch('http://localhost:8787/_oauth', {
         method: "POST",
         headers: {
-            "content-type": "application/json"
+            'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ code })
     });
 
     const accessTokenObject = await workerResponse.json() as AccessTokenObject;
 
-    const userProfileResponse = await fetch("https://api.github.com/user", {
+    const userProfileResponse = await fetch('https://api.github.com/user', {
         headers: {
-            accept: "application/vnd.github.v3+json",
-            authorization: `token ${accessTokenObject.access_token}`
+            Accept: 'application/vnd.github.v3+json',
+            Authorization: `token ${accessTokenObject.access_token}`
         }
     });
 

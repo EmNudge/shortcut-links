@@ -11,7 +11,7 @@
 	const handleDelete = async () => {
 		console.log(`delete link`, link);
 
-		await fetch(new URL(link.name, workerURL), { method: 'DELETE' });
+		await fetch(new URL(link.name, workerURL), { method: 'DELETE', credentials: 'include' });
 		$modalModeSt = { type: 'closed' };
 
 		const oldLink = link;
