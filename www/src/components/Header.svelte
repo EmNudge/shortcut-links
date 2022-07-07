@@ -34,6 +34,7 @@
     header {
         margin: 0 auto;
         max-width: 800px;
+        padding: 0 10px;
 
 		position: sticky;
         top: 0;
@@ -49,7 +50,7 @@
 	.meta {
 		display: flex;
 		justify-content: space-between;
-		padding-top: 40px;
+		padding-top: clamp(20px, 5vw, 40px);
 	}
     .new-link {
         padding: 20px;

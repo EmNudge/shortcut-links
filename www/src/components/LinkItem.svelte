@@ -33,7 +33,7 @@
 		border-radius: 15px;
 		box-shadow: var(--box-shadow);
 		padding: 20px 30px;
-		margin: 20px 40px;
+		margin: 20px;
 
 		display: flex;
 		justify-content: space-between;
