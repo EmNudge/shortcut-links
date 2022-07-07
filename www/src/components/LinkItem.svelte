@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { userSt } from '../stores';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
@@ -15,12 +16,14 @@
 	</div>
 
 	<div class="icons">
-		<button on:click={() => dispatch('edit')}>
-			<img src="/edit.svg" alt="edit" />
-		</button>
-		<button on:click={() => dispatch('delete')}>
-			<img src="/bin.svg" alt="delete" />
-		</button>
+		{#if $userSt}
+			<button on:click={() => dispatch('edit')}>
+				<img src="/edit.svg" alt="edit" />
+			</button>
+			<button on:click={() => dispatch('delete')}>
+				<img src="/bin.svg" alt="delete" />
+			</button>
+		{/if}
 	</div>
 </section>
 

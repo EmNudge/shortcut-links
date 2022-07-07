@@ -20,7 +20,11 @@
                 <a href="http://localhost:8787/_oauth">Login With Github</a>
             {/if}
         </div>
-        <button class="new-link" on:click={handleNewLink}>New Link</button>
+        {#if $userSt}
+            <button class="new-link" on:click={handleNewLink}>New Link</button>
+        {:else}
+            <div />
+        {/if}
     </div>
     <br />
     <Search bind:value={$searchSt} />
