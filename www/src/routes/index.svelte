@@ -3,12 +3,15 @@
 	import LinkList from '../components/LinkList.svelte';
 	import { workerURL } from '../variables';
 	import Modal from '../components/Modal/index.svelte';
-	import { linksSt, searchSt } from '../stores';
+	import { linksSt, searchSt, userSt } from '../stores';
 	import { handleAuth } from '../utils/handleAuth';
 	import { onMount } from 'svelte';
 
-	const linksFetch = fetch(workerURL).then((res) => res.json());
-    linksFetch.then(data => linksSt.set(data));
+	const linksFetch = fetch(workerURL, { credentials: 'include' }).then(res => res.json())
+	linksFetch.then(({ user, data }) => {
+		linksSt.set(data);
+		userSt.set(user);
+	});
 
 	onMount(handleAuth);
 </script>

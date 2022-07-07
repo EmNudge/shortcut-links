@@ -1,9 +1,15 @@
 <script lang="ts">
 	import Search from './Search.svelte';
     import { modalModeSt, searchSt, userSt } from '../stores';
+    import { workerURL } from '../variables';
 
     const handleNewLink = () => {
         $modalModeSt = { type: 'create' };
+    };
+
+    const handleLogOut = async () => {
+        await fetch(new URL('_logout', workerURL), { credentials: 'include' });
+        userSt.set(undefined);
     };
 </script>
 
@@ -14,13 +20,17 @@
             {#if $userSt}
                 <div class="logged-in">
                     <h3>{$userSt.name}</h3>
-                    <button>Log Out</button>
+                    <button on:click={handleLogOut}>Log Out</button>
                 </div>
             {:else}
-                <a href="http://localhost:8787/_oauth">Login With Github</a>
+                <a href="{workerURL}/_oauth">Login With Github</a>
             {/if}
         </div>
-        <button class="new-link" on:click={handleNewLink}>New Link</button>
+        {#if $userSt}
+            <button class="new-link" on:click={handleNewLink}>New Link</button>
+        {:else}
+            <div />
+        {/if}
     </div>
     <br />
     <Search bind:value={$searchSt} />
@@ -30,6 +40,7 @@
     header {
         margin: 0 auto;
         max-width: 800px;
+        padding: 0 10px;
 
 		position: sticky;
         top: 0;
@@ -45,7 +56,7 @@
 	.meta {
 		display: flex;
 		justify-content: space-between;
-		padding-top: 40px;
+		padding-top: clamp(20px, 5vw, 40px);
 	}
     .new-link {
         padding: 20px;

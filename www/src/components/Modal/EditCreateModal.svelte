@@ -36,12 +36,14 @@
 		if (isUpdate) {
 			await fetch(new URL(name, workerURL), {
 				method: 'PUT',
-				body: JSON.stringify(newLink)
+				body: JSON.stringify(newLink),
+				credentials: 'include',
 			});
 		} else {
 			await fetch(new URL(link.name, workerURL), {
 				method: 'POST',
-				body: JSON.stringify(newLink)
+				body: JSON.stringify(newLink),
+				credentials: 'include',
 			});
 		}
 		$modalModeSt = { type: 'closed' };
