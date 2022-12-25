@@ -1,1 +1,0 @@
-export const workerURL = import.meta.env.VITE_WORKER_URL;
