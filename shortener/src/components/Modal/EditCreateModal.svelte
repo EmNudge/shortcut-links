@@ -5,9 +5,9 @@
 	import Base from './Base.svelte';
 	import { linksSt, modalModeSt, type Link } from '../../stores';
 
-	export let link: Link = { name: '', url: '' };
+	export let link: Link = { name: '', url: '', privileged: false };
 
-	let { name, url } = link;
+	let { name, url, privileged } = link;
 	let error = '';
 
 	const parsedUrl = (url: string) => {
@@ -29,8 +29,7 @@
 		
 		const isUpdate = Boolean(link.name);
 		const oldLink = link;
-		const newLink = { url: newUrl.toString(), name };
-		console.log(`setting "${name}" to`, newLink);
+		const newLink = { url: newUrl.toString(), name, privileged };
 
 		if (isUpdate) {
 			await fetch('/api/update-link', {
@@ -51,6 +50,8 @@
 			return newLinks;
 		})
 	};
+
+	$: isButtonDisabled = name === link.name && url === link.url && privileged === Boolean(link.privileged);
 </script>
 
 {#if link}
@@ -64,9 +65,13 @@
 				<span>URL</span>
 				<input type="text" placeholder="url..." bind:value={url} />
 			</label>
+			<label>
+				<span>Protected</span>
+				<input type="checkbox" bind:checked={privileged}>
+			</label>
 		</form>
 		<div slot="footer">
-			<button type="submit" form="link-form" disabled={name === link.name && url == link.url}>Update Link</button>
+			<button type="submit" form="link-form" disabled={isButtonDisabled}>Update Link</button>
 			<div class="error">
 				{error}
 			</div>
@@ -81,6 +86,7 @@
 	}
 	label {
 		display: grid;
+		justify-items: flex-start;
 		grid-gap: 10px;
 		margin-bottom: 10px;
 	}

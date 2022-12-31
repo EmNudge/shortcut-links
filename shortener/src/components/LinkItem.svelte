@@ -4,11 +4,12 @@
 
 	export let name: string;
 	export let url: string;
+	export let privileged: boolean | undefined;
 
 	export let isEditable = false;
 </script>
 
-<section>
+<section class:privileged>
 	<div class="top-row">
 		<h2>{name}</h2>
 		<div class="icons">
@@ -32,6 +33,9 @@
 		background: white;
 		border-radius: 15px;
 		padding: 20px 30px;
+	}
+	.privileged {
+		border: 1px solid orange;
 	}
 	h2,
 	h3 {

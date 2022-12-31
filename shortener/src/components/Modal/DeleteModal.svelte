@@ -8,8 +8,6 @@
 	export let link: Link;
 
 	const handleDelete = async () => {
-		console.log(`delete link`, link);
-
 		await fetch('/api/update-link', { 
 			method: 'DELETE',
 			body: JSON.stringify({ name: link.name })
@@ -25,6 +23,7 @@
 
 {#if link}
 	<Base title="Delete Link?" on:close={() => dispatch('close')}>
+		<br>
 		<dl>
 			<dt>Name</dt>
 			<dd>{link.name}</dd>

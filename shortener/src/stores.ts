@@ -3,7 +3,7 @@ import { writable } from "svelte/store";
 export interface Link {
     name: string;
     url: string;
-    protected?: boolean;
+    privileged?: boolean;
 }
 
 export const linksSt = writable<Link[]>([]);

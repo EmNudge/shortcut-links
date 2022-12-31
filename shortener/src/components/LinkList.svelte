@@ -22,10 +22,11 @@
 </script>
 
 <div use:anim>
-	{#each listData as { name, url }, i (name)}
+	{#each listData as { name, url, privileged }, i (name)}
 		<LinkItem
 			{name}
 			{url}
+			{privileged}
 			on:edit={() => handleInteract(i, 'edit')}
 			on:delete={() => handleInteract(i, 'delete')}
 			isEditable={Boolean($page.data.session)}

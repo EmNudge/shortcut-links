@@ -9,9 +9,6 @@
         $modalModeSt = { type: 'create' };
     };
 
-    onMount(() => {
-        console.log($page.data)
-    });
     const { session } = $page.data;
 </script>
 

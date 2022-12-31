@@ -29,10 +29,12 @@
 				<img src="/close.svg" alt="close">
 			</button>
 		</header>
-		<main>
-			<h1>{title}</h1>
-			<slot />
-		</main>
+		<div class="main-centerer">
+			<main>
+				<h1>{title}</h1>
+				<slot />
+			</main>
+		</div>
 		<footer>
 			<slot name="footer" />
 		</footer>
@@ -67,6 +69,11 @@
 		display: flex;
 		justify-content: flex-end;
 		padding: 20px;
+	}
+
+	.main-centerer {
+		display: flex;
+		justify-content: center;
 	}
 	main {
 		padding: 50px;

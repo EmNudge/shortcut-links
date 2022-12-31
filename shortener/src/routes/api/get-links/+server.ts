@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ request, platform, locals }) => {
 
   const [session, links] = await Promise.all([locals.getSession(), getAllLinks(REDIRECTS_KV)])
 
-  const allowedLinks = links.filter(link => !link.protected || session?.user?.name);
+  const allowedLinks = links.filter(link => !link.privileged || session?.user?.name);
 
   return json(allowedLinks, { status: 200 });
 };

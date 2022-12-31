@@ -19,9 +19,9 @@ const getRedirectsKV = (platform: Readonly<App.Platform>) => {
 export const POST: RequestHandler = async ({ platform, request }) => {
   const { put } = getRedirectsKV(platform);
 
-  const { name, url } = await getPayload(request, { name: 'string', url: 'string' });
+  const { name, url, privileged } = await getPayload(request, { name: 'string', url: 'string', privileged: '?boolean' });
 
-  await put(name, { name, url });
+  await put(name, { name, url, privileged });
 
   return json(`link with name "${name}" successfully created`, { status: 200 })
 }
@@ -29,12 +29,12 @@ export const POST: RequestHandler = async ({ platform, request }) => {
 export const PUT: RequestHandler = async ({ platform, request }) => {
   const { put, deleteItem } = getRedirectsKV(platform);
 
-  const { name, url, oldName } = await getPayload(request, { name: 'string', oldName: 'string', url: 'string' });
+  const { name, url, privileged, oldName } = await getPayload(request, { name: 'string', oldName: 'string', url: 'string', privileged: '?boolean' });
 
   if (oldName !== name) {
-    await Promise.all([deleteItem(oldName), put(name, { name, url })]);
+    await Promise.all([deleteItem(oldName), put(name, { name, url, privileged })]);
   } else {
-    await put(name, { name, url })
+    await put(name, { name, url, privileged })
   }
 
   return json(`link with name "${name}" successfully updated`, { status: 200 })
