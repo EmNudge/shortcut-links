@@ -1,50 +1,49 @@
 <script lang="ts">
-	import { userSt } from '../stores';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let name: string;
 	export let url: string;
+
+	export let isEditable = false;
 </script>
 
 <section>
-	<div class="text">
+	<div class="top-row">
 		<h2>{name}</h2>
-		<h3>
-			<a href={url}>{url}</a>
-		</h3>
+		<div class="icons">
+			{#if isEditable}
+				<button on:click={() => dispatch('edit')}>
+					<img src="/edit.svg" alt="edit" />
+				</button>
+				<button on:click={() => dispatch('delete')}>
+					<img src="/bin.svg" alt="delete" />
+				</button>
+			{/if}
+		</div>
 	</div>
-
-	<div class="icons">
-		{#if $userSt}
-			<button on:click={() => dispatch('edit')}>
-				<img src="/edit.svg" alt="edit" />
-			</button>
-			<button on:click={() => dispatch('delete')}>
-				<img src="/bin.svg" alt="delete" />
-			</button>
-		{/if}
-	</div>
+	<h3>
+		<a href={url}>{url}</a>
+	</h3>
 </section>
 
 <style>
 	section {
 		background: white;
 		border-radius: 15px;
-		box-shadow: var(--box-shadow);
 		padding: 20px 30px;
-		margin: 20px;
-
-		display: flex;
-		justify-content: space-between;
 	}
 	h2,
 	h3 {
 		margin: 0;
 	}
-	.text {
-		display: grid;
-		grid-gap: 10px;
+	h3 {
+		font-weight: 200;
+		font-size: 1rem;
+	}
+	.top-row {
+		display: flex;
+		justify-content: space-between;
 	}
 	.icons {
 		display: flex;

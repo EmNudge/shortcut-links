@@ -25,33 +25,33 @@
 
 {#if link}
 	<Base title="Delete Link?" on:close={() => dispatch('close')}>
-		<div>
-			<span>name</span>
-			<h2>{link.name}</h2>
-			<br>
-			<span>url</span>
-			<h2>{link.url}</h2>
-		</div>
-		<br>
-		<br>
-		<div>
+		<dl>
+			<dt>Name</dt>
+			<dd>{link.name}</dd>
+	
+			<dt>URL</dt>
+			<dd>{link.url}</dd>
+		</dl>
+		<div slot="footer" >
 			<button type="button" on:click={handleDelete}>Delete Link</button>
 		</div>
 	</Base>
 {/if}
 
 <style>
-	div {
-		display: grid;
-		justify-content: center;
+	dl {
+		margin-bottom: 20px;
+	}
+	dt {
+		font-weight: 700;
+	}
+	dd {
+		padding: 10px;
 	}
 	button {
-		background: #c84848;
-		color: white;
+		background: #ffaaaa;
+		border: 1px solid red;
+		color: rgb(95, 0, 0);
 		padding: 10px 80px;
-		cursor: pointer;
-		box-shadow: var(--box-shadow);
-		border: none;
-		border-radius: 5px;
 	}
 </style>

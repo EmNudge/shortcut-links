@@ -1,20 +1,23 @@
 import { error, json, type RequestHandler } from '@sveltejs/kit';
+import type { Link } from 'src/stores';
 
-export const GET: RequestHandler = async ({ request, platform }) => {
+const getAllLinks = async (kvNamespace: KVNamespace<string>) => {
+  const { keys } = await kvNamespace.list();
+
+  const names = keys.map(({ name }) => name);
+  const allGetPromises = names.map((name) => kvNamespace.get(name));
+
+  const values = await Promise.all(allGetPromises);
+  return values.map(data => JSON.parse(data ?? '')) as Link[];
+}
+
+export const GET: RequestHandler = async ({ request, platform, locals }) => {
 	const REDIRECTS_KV = platform.env?.REDIRECTS_KV;
   if (!REDIRECTS_KV) throw error(500, 'cannot find redirects');
 
-  const { keys } = await REDIRECTS_KV.list();
-  const names = keys.map(({ name }) => name) as string[];
-  const values = await Promise.all(names.map((name) => REDIRECTS_KV.get(name))) as string[];
+  const [session, links] = await Promise.all([locals.getSession(), getAllLinks(REDIRECTS_KV)])
 
-  const links = values.map(value => {
-    try {
-      return JSON.parse(value)
-    } catch {
-      return value;
-    }
-  });
+  const allowedLinks = links.filter(link => !link.protected || session?.user?.name);
 
-  return json(links, { status: 200 });
+  return json(allowedLinks, { status: 200 });
 };

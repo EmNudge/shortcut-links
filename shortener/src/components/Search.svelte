@@ -16,8 +16,8 @@
 		width: 800px;
 
 		padding: 20px;
+		margin-top: 20px;
 		border-radius: 5px;
-		box-shadow: var(--box-shadow);
 	}
 
 	input {

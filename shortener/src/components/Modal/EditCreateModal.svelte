@@ -35,7 +35,7 @@
 		if (isUpdate) {
 			await fetch('/api/update-link', {
 				method: 'PUT',
-				body: JSON.stringify(newLink),
+				body: JSON.stringify({ ...newLink, oldName: oldLink.name }),
 			});
 		} else {
 			await fetch('/api/update-link', {
@@ -55,7 +55,7 @@
 
 {#if link}
 	<Base title="{link.name ? 'Edit' : 'New'} Link" on:close={() => dispatch('close')}>
-		<form on:submit|preventDefault={handleSubmit}>
+		<form on:submit|preventDefault={handleSubmit} id="link-form">
 			<label>
 				<span>Name</span>
 				<input type="text" placeholder="name..." bind:value={name} />
@@ -64,13 +64,13 @@
 				<span>URL</span>
 				<input type="text" placeholder="url..." bind:value={url} />
 			</label>
-			<br>
-			<br>
-			<button type="submit" disabled={name === link.name && url == link.url}>Update Link</button>
+		</form>
+		<div slot="footer">
+			<button type="submit" form="link-form" disabled={name === link.name && url == link.url}>Update Link</button>
 			<div class="error">
 				{error}
 			</div>
-		</form>
+		</div>
 	</Base>
 {/if}
 
@@ -85,19 +85,15 @@
 		margin-bottom: 10px;
 	}
 	input {
-		box-shadow: var(--box-shadow);
-		border: none;
-		font-size: 1.25rem;
-		padding: 10px;
-		border-radius: 5px;
+		border: 1px solid #e2e2e2;
+    font-size: 1.25rem;
+    padding: 10px;
+    border-radius: 7px;
 	}
 	button {
-		background: #8be799;
-		border: none;
-		border-radius: 5px;
-		padding: 10px;
-		cursor: pointer;
-		box-shadow: var(--box-shadow);
+		background: #c8f3ce;
+		border: 1px solid rgb(90, 239, 90);
+		padding: 10px 80px;
 	}
 	button:disabled {
 		cursor: auto;

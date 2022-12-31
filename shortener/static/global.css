@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 * {
     box-sizing: border-box;
     margin: 0;
@@ -9,10 +10,21 @@
 }
 
 body {
-    font-family: monospace;
+    font-family: 'Roboto', sans-serif;
     min-height: 100vh;
     background: var(--bg);
     color: #323232;
+}
+
+button,
+.button {
+    box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px 0 #0000000f;
+    background: white;
+    text-align: center;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    border-radius: 3px;
+    border: none;
 }
 
 a {

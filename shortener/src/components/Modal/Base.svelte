@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { elasticOut } from 'svelte/easing';
+	import { scale } from 'svelte/transition';
 	const dispatch = createEventDispatcher();
 
 	export let title: string = 'Modal';
@@ -9,19 +11,31 @@
 		if (divEl.contains(e.target)) return;
 		dispatch('close');
 	};
+
+	const blurTransition = (node: HTMLElement) => ({
+		duration: 250,
+		easing: elasticOut,
+		css: (t: number) => `
+			backdrop-filter: blur(${t * 2}px);
+			opacity: ${t};
+		`,
+	});
 </script>
 
-<section on:click={handleClick} on:keydown={handleClick}>
-	<div class="container" bind:this={divEl}>
-		<div class="header">
-			<h2>{title}</h2>
-			<button on:click={() => dispatch('close')}>
+<section on:click={handleClick} on:keydown={handleClick} transition:blurTransition>
+	<div class="container" bind:this={divEl} transition:scale={{ duration: 150 }}>
+		<header>
+			<button class="close-btn" on:click={() => dispatch('close')}>
 				<img src="/close.svg" alt="close">
 			</button>
-		</div>
-		<div class="content">
+		</header>
+		<main>
+			<h1>{title}</h1>
 			<slot />
-		</div>
+		</main>
+		<footer>
+			<slot name="footer" />
+		</footer>
 	</div>
 </section>
 
@@ -37,54 +51,40 @@
 		width: 100%;
 		height: 100%;
 
-		background: #0005;
+		background: #0001;
 		z-index: 10;
 		backdrop-filter: blur(2px);
-		animation: forwards .25s blur-in;
-	}
-	@keyframes blur-in {
-		from {
-			opacity: 0;
-			backdrop-filter: blur(0px);
-		}
-		to {
-			opacity: 1;
-			backdrop-filter: blur(2px);
-		}
 	}
 
 	.container {
-		border-radius: 5px;
-		background: rgb(234, 234, 234);
+		border-radius: 15px;
+		background: white;
 		min-width: 600px;
 		min-height: 300px;
-		animation: forwards 0.15s fade-in;
 	}
-	@keyframes fade-in {
-		from {
-			transform: scale(.8);
-			opacity: 0;
-		}
-		to {
-			transform: scale(1);
-			opacity: 1;
-		}
+
+	header {
+		display: flex;
+		justify-content: flex-end;
+		padding: 20px;
 	}
-	.header {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		padding: 30px;
-	}
-	.content {
+	main {
 		padding: 50px;
 		padding-top: 0px;
 	}
-	button {
-		border: none;
-		background: none;
-		cursor: pointer;
+	footer {
+		padding: 50px;
+		padding-top: 10px;
 		display: flex;
+		justify-content: center;
 		align-items: center;
+	}
+	h1 {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+	.close-btn {
+		box-shadow: none;
 	}
 	button img {
 		height: 16px;

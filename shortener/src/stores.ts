@@ -3,6 +3,7 @@ import { writable } from "svelte/store";
 export interface Link {
     name: string;
     url: string;
+    protected?: boolean;
 }
 
 export const linksSt = writable<Link[]>([]);
@@ -16,6 +17,3 @@ export type ModalMode = EditModal | CreateModal | DeleteModal | Closed;
 export const modalModeSt = writable<ModalMode>({ type: 'closed' });
 
 export const searchSt = writable('');
-
-export type User = { name: string, login: string } | undefined
-export const userSt = writable<User>({ name: 'Johnson', login: 'bepis.com' });
