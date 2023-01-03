@@ -17,8 +17,12 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
   if (!REDIRECTS_KV) throw error(500, 'cannot find redirects');
 
   const [isPrivileged, links] = await Promise.all([isPrivilegedSession(locals), getAllLinks(REDIRECTS_KV)])
-
-  const allowedLinks = links.filter(link => !link.privileged || isPrivileged);
+  
+  const allowedLinks = isPrivileged 
+    ? links 
+    : links
+      .filter(link => !link.hidden && !link.privileged)
+      .map(({ name, url }) => ({ name, url }));
 
   return json(allowedLinks, { status: 200 });
 };

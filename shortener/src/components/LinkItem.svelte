@@ -5,11 +5,12 @@
 	export let name: string;
 	export let url: string;
 	export let privileged: boolean | undefined;
+	export let hidden: boolean | undefined;
 
 	export let isEditable = false;
 </script>
 
-<section class:privileged>
+<section class:privileged class:hidden>
 	<div class="top-row">
 		<h2>{name}</h2>
 		<div class="icons">
@@ -36,6 +37,12 @@
 	}
 	.privileged {
 		border: 1px solid orange;
+	}
+	.hidden {
+		box-shadow: inset 0 0 8px #000a;
+	}
+	.hidden h2 {
+		opacity: .8;
 	}
 	h2,
 	h3 {

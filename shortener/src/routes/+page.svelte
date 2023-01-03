@@ -3,10 +3,10 @@
 	import LinkList from '../components/LinkList.svelte';
 	import Modal from '../components/Modal/index.svelte';
 	import Toast from '../components/Toast.svelte';
-	import { linksSt, searchSt } from '../stores';
+	import { linksSt, searchSt, type Link } from '../stores';
 	import { onMount } from 'svelte';
 
-  export let data: { links: { name: string; url: string }[] };
+  export let data: { links: Link[] };
 	onMount(() => linksSt.set(data.links));
 </script>
 

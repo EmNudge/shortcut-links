@@ -4,6 +4,7 @@ export interface Link {
     name: string;
     url: string;
     privileged?: boolean;
+    hidden?: boolean;
 }
 
 export const linksSt = writable<Link[]>([]);

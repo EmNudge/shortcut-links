@@ -6,10 +6,10 @@
 	import { linksSt, modalModeSt, type Link } from '../../stores';
 	import { INVALID_LINK_NAMES } from '$lib/links';
 	
-	export let link: Link = { name: '', url: '', privileged: false };
+	export let link: Link = { name: '', url: '', privileged: false, hidden: false };
 	const isUpdateForm = Boolean(link.name);
 
-	let { name, url, privileged } = link;
+	let { name, url, privileged, hidden } = link;
 	let error = '';
 
 	const parsedUrl = (url: string) => {
@@ -41,7 +41,7 @@
 		}
 		
 		const oldLink = link;
-		const newLink = { url: newUrl.toString(), name, privileged };
+		const newLink = { url: newUrl.toString(), name, privileged, hidden };
 
 		if (isUpdateForm) {
 			await fetch('/api/update-link', {
@@ -63,7 +63,11 @@
 		})
 	};
 
-	$: isButtonDisabled = name === link.name && url === link.url && privileged === Boolean(link.privileged);
+	$: isButtonDisabled = 
+		name === link.name 
+		&& url === link.url 
+		&& privileged === Boolean(link.privileged)
+		&& hidden === Boolean(link.hidden);
 </script>
 
 {#if link}
@@ -78,8 +82,12 @@
 				<input type="text" placeholder="url..." bind:value={url} />
 			</label>
 			<label>
-				<span>Protected</span>
+				<span>Protected (only usable by admins)</span>
 				<input type="checkbox" bind:checked={privileged}>
+			</label>
+			<label class:hidden={privileged}>
+				<span>Hidden (only viewable in list by admins)</span>
+				<input disabled={privileged} type="checkbox" bind:checked={hidden}>
 			</label>
 		</form>
 		<div slot="footer">
@@ -101,6 +109,9 @@
 		justify-items: flex-start;
 		grid-gap: 10px;
 		margin-bottom: 10px;
+	}
+	label.hidden {
+		opacity: .6;
 	}
 	input {
 		border: 1px solid #e2e2e2;

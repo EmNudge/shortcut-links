@@ -25,14 +25,19 @@ export const POST: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put } = getRedirectsKV(platform);
 
-  const { name, url, privileged } = await getPayload(request, { name: 'string', url: 'string', privileged: '?boolean' });
+  const { name, url, privileged, hidden } = await getPayload(request, {
+    name: 'string',
+    url: 'string',
+    privileged: '?boolean',
+    hidden: '?boolean',
+  });
 
   const linkName = name.trim().toLowerCase();
   if (INVALID_LINK_NAMES.has(linkName)) {
     throw error(400, 'link name is using a reserved word');
   }
 
-  await put(linkName, { name: linkName, url, privileged });
+  await put(linkName, { name: linkName, url, privileged, hidden });
 
   return json(`link with name "${linkName}" successfully created`, { status: 200 })
 }
@@ -44,13 +49,19 @@ export const PUT: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put, deleteItem } = getRedirectsKV(platform);
 
-  const { name, url, privileged, oldName } = await getPayload(request, { name: 'string', oldName: 'string', url: 'string', privileged: '?boolean' });
+  const { name, url, privileged, hidden, oldName } = await getPayload(request, {
+    name: 'string',
+    oldName: 'string',
+    url: 'string',
+    privileged: '?boolean',
+    hidden: '?boolean',
+  });
 
   const linkName = name.trim().toLowerCase();
   if (oldName !== linkName) {
-    await Promise.all([deleteItem(oldName), put(linkName, { name: linkName, url, privileged })]);
+    await Promise.all([deleteItem(oldName), put(linkName, { name: linkName, url, privileged, hidden })]);
   } else {
-    await put(linkName, { name: linkName, url, privileged })
+    await put(linkName, { name: linkName, url, privileged, hidden })
   }
 
   return json(`link with name "${linkName}" successfully updated`, { status: 200 })
