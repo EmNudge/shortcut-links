@@ -14,7 +14,6 @@ export const isPrivileged = (user: Session['user']) => {
 
 export const isPrivilegedSession = async (locals: App.Locals) => {
 	const session = await locals.getSession();
-	console.log({session})
   return isPrivileged(session?.user);
 }
 
