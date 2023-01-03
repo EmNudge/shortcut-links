@@ -2,7 +2,6 @@
 	import Search from './Search.svelte';
     import { modalModeSt, searchSt } from '../stores';
     import { page } from '$app/stores';
-	import { onMount } from 'svelte';
 	import Profile from './Profile.svelte';
 
     const handleNewLink = () => {
@@ -23,14 +22,15 @@
         <div class="auth">
             {#if session?.user}
                 <Profile user={session.user} />
-                <a href="/auth/signout" class="button">
-                    <span>Sign Out</span>
-                </a>
+                <form action="/auth/signout" method="POST">
+                    <button type="submit">Sign Out</button>
+                </form>
             {:else}
                 <span>Want to edit links?</span>
-                <a href="/auth/signin" class="button">
-                    <span>Sign In</span>
-                </a>
+                <form action="/auth/signin/github" method="POST">
+                    <input type="hidden" name="callbackUrl" value={$page.url.origin}>
+                    <button type="submit">Sign In</button>
+                </form>
             {/if}
         </div>
     </div>
@@ -69,7 +69,7 @@
         grid-gap: 10px;
         align-content: center;
     }
-    .auth a {
-        color: black;
+    .auth button {
+        width: 100%;
     }
 </style>

@@ -1,20 +1,21 @@
 import { dev } from '$app/environment';
 import type { Handle } from '@sveltejs/kit';
 import { SvelteKitAuth } from "@auth/sveltekit"
-import GitHub from '@auth/core/providers/github';
-import { GITHUB_AUTH_ID, GITHUB_AUTH_SECRET, APPROVED_ADMINS } from "$env/static/private"
+import { APPROVED_ADMINS } from "$env/static/private"
+import githubProvider from '$lib/providers/github';
 
 const approvedAdmins = APPROVED_ADMINS.trim().split(/\s*,\s*/);
 
 const authHandler = SvelteKitAuth({
-	providers: [
-		GitHub({ clientId: GITHUB_AUTH_ID, clientSecret: GITHUB_AUTH_SECRET }) as any,
-	],
+	trustHost: true,
 	callbacks: {
 		signIn({ user }) {
 			return approvedAdmins.includes(user.name ?? '')
 		}
-	}
+	},
+	providers: [
+		githubProvider
+	],
 });
 
 export const handle: Handle = async ({ event, resolve }) => {
