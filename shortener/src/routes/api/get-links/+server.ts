@@ -1,3 +1,4 @@
+import { isPrivilegedSession } from '../../../hooks.server';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import type { Link } from 'src/stores';
 
@@ -11,13 +12,13 @@ const getAllLinks = async (kvNamespace: KVNamespace<string>) => {
   return values.map(data => JSON.parse(data ?? '')) as Link[];
 }
 
-export const GET: RequestHandler = async ({ request, platform, locals }) => {
+export const GET: RequestHandler = async ({ platform, locals }) => {
 	const REDIRECTS_KV = platform.env?.REDIRECTS_KV;
   if (!REDIRECTS_KV) throw error(500, 'cannot find redirects');
 
-  const [session, links] = await Promise.all([locals.getSession(), getAllLinks(REDIRECTS_KV)])
+  const [isPrivileged, links] = await Promise.all([isPrivilegedSession(locals), getAllLinks(REDIRECTS_KV)])
 
-  const allowedLinks = links.filter(link => !link.privileged || session?.user?.name);
+  const allowedLinks = links.filter(link => !link.privileged || isPrivileged);
 
   return json(allowedLinks, { status: 200 });
 };

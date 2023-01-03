@@ -4,7 +4,7 @@
 
 	import Base from './Base.svelte';
 	import { linksSt, modalModeSt, type Link } from '../../stores';
-	import { INVALID_LINK_NAMES } from '../../routes/api/update-link/+server';
+	import { INVALID_LINK_NAMES } from '$lib/links';
 	
 	export let link: Link = { name: '', url: '', privileged: false };
 	const isUpdateForm = Boolean(link.name);
