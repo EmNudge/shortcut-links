@@ -4,8 +4,10 @@
 
 	import Base from './Base.svelte';
 	import { linksSt, modalModeSt, type Link } from '../../stores';
-
+	import { INVALID_LINK_NAMES } from '../../routes/api/update-link/+server';
+	
 	export let link: Link = { name: '', url: '', privileged: false };
+	const isUpdateForm = Boolean(link.name);
 
 	let { name, url, privileged } = link;
 	let error = '';
@@ -23,15 +25,25 @@
 	}
 
 	const handleSubmit = async () => {
+		const linkName = name.trim().toLowerCase();
+		if (INVALID_LINK_NAMES.has(linkName)) {
+			error = 'reserved link name';
+			return;
+		} else if (!/^(\w|-)+$/i.test(linkName)) {
+			error = 'invalid characters in name';
+			return;
+		}
+
 		const newUrl = parsedUrl(url);
-		error = newUrl ? '' : 'invalid URL';
-		if (error || !newUrl) return;
+		if (!newUrl) {
+			error = 'invalid URL';
+			return;
+		}
 		
-		const isUpdate = Boolean(link.name);
 		const oldLink = link;
 		const newLink = { url: newUrl.toString(), name, privileged };
 
-		if (isUpdate) {
+		if (isUpdateForm) {
 			await fetch('/api/update-link', {
 				method: 'PUT',
 				body: JSON.stringify({ ...newLink, oldName: oldLink.name }),
@@ -55,7 +67,7 @@
 </script>
 
 {#if link}
-	<Base title="{link.name ? 'Edit' : 'New'} Link" on:close={() => dispatch('close')}>
+	<Base title="{isUpdateForm ? 'Edit' : 'New'} Link" on:close={() => dispatch('close')}>
 		<form on:submit|preventDefault={handleSubmit} id="link-form">
 			<label>
 				<span>Name</span>

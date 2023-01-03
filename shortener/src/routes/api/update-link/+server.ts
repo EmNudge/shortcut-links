@@ -2,6 +2,11 @@ import { getPayload } from '$lib/getPayload';
 import { error, type RequestHandler, json } from '@sveltejs/kit';
 import type { Link } from 'src/stores';
 
+export const INVALID_LINK_NAMES = new Set([
+  'auth',
+  'api',
+]);
+
 const getRedirectsKV = (platform: Readonly<App.Platform>) => {
   const REDIRECTS_KV = platform.env?.REDIRECTS_KV;
   if (!REDIRECTS_KV) throw error(500, 'cannot find redirects');
@@ -21,9 +26,14 @@ export const POST: RequestHandler = async ({ platform, request }) => {
 
   const { name, url, privileged } = await getPayload(request, { name: 'string', url: 'string', privileged: '?boolean' });
 
-  await put(name, { name, url, privileged });
+  const linkName = name.trim().toLowerCase();
+  if (INVALID_LINK_NAMES.has(linkName)) {
+    throw error(400, 'link name is using a reserved word');
+  }
 
-  return json(`link with name "${name}" successfully created`, { status: 200 })
+  await put(linkName, { name: linkName, url, privileged });
+
+  return json(`link with name "${linkName}" successfully created`, { status: 200 })
 }
 
 export const PUT: RequestHandler = async ({ platform, request }) => {
@@ -31,13 +41,14 @@ export const PUT: RequestHandler = async ({ platform, request }) => {
 
   const { name, url, privileged, oldName } = await getPayload(request, { name: 'string', oldName: 'string', url: 'string', privileged: '?boolean' });
 
-  if (oldName !== name) {
-    await Promise.all([deleteItem(oldName), put(name, { name, url, privileged })]);
+  const linkName = name.trim().toLowerCase();
+  if (oldName !== linkName) {
+    await Promise.all([deleteItem(oldName), put(linkName, { name: linkName, url, privileged })]);
   } else {
-    await put(name, { name, url, privileged })
+    await put(linkName, { name: linkName, url, privileged })
   }
 
-  return json(`link with name "${name}" successfully updated`, { status: 200 })
+  return json(`link with name "${linkName}" successfully updated`, { status: 200 })
 }
 
 export const DELETE: RequestHandler = async ({ platform, request }) => {
