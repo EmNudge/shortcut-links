@@ -1,15 +1,16 @@
 {
-    "name": "Quick Links",
+    "name": "Redirects",
     "version": "1.0",
-    "manifest_version": 2,
+    "manifest_version": 3,
     "permissions": [
-        "*://go/*",
-        "declaritiveNetRequest",
         "declarativeNetRequestWithHostAccess"
+    ],
+    "host_permissions": [
+        "*://go/*"
     ],
     "declarative_net_request": {
         "rule_resources": [{
-            "id": "go_links",
+            "id": "redirects",
             "enabled": true,
             "path": "routes.json"
         }]

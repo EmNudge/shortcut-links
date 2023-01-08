@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://localhost:3000"
+      }
+    },
+    "condition": {
+      "regexFilter": "go",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "localhost:3000/\\1"
+      }
+    },
+    "condition": {
+      "regexFilter": "go/(.+)$",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  }
+]
