@@ -51,6 +51,8 @@
 	h3 {
 		font-weight: 200;
 		font-size: 1rem;
+		margin-top: 10px;
+		word-break: break-all;
 	}
 	.top-row {
 		display: flex;

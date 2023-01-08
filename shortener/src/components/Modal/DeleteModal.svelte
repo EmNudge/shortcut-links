@@ -29,7 +29,7 @@
 			<dd>{link.name}</dd>
 	
 			<dt>URL</dt>
-			<dd>{link.url}</dd>
+			<dd><a href={link.url}>{link.url}</a></dd>
 		</dl>
 		<div slot="footer" >
 			<button type="button" on:click={handleDelete}>Delete Link</button>
@@ -46,6 +46,8 @@
 	}
 	dd {
 		padding: 10px;
+		word-break: break-all;
+    max-width: 400px;
 	}
 	button {
 		background: #ffaaaa;
