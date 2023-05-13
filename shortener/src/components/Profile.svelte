@@ -1,9 +1,11 @@
 <script lang='ts'>
+	import { showModal } from "$lib/modal";
+
   type UserData = { image?: string | null; name?: string | null }
   export let user: UserData = { image: '', name: 'UNKNOWN USER' };
 </script>
 
-<div class="profile">
+<button class="profile" on:click={() => showModal({ type: 'auth' })}>
   <div class="logo-container">
     <img src={user.image} alt="profile">
   </div>
@@ -11,12 +13,17 @@
     <span>Signed in as</span>
     <strong>{user.name ?? 'UNKNOWN USER'}</strong>
   </div>
-</div>
+</button>
 
 <style>
   .profile {
     display: flex;
     gap: 10px;
+    border: 1px solid #0002;
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    background: none;
+    cursor: pointer;
   }
   .logo-container {
     display: flex;

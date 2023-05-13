@@ -3,6 +3,7 @@
 
 	import EditCreateModal from './EditCreateModal.svelte';
 	import DeleteModal from './DeleteModal.svelte';
+	import AuthModal from './AuthModal.svelte';
 
 	$: modalMode = $modalModeSt;
 
@@ -17,4 +18,6 @@
 	<DeleteModal link={modalMode.link} on:close={handleCloseModal} />
 {:else if modalMode.type === 'create'}
 	<EditCreateModal on:close={handleCloseModal} />
+{:else if modalMode.type === 'auth'}
+	<AuthModal on:close={handleCloseModal} />
 {/if}

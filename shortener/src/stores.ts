@@ -13,7 +13,8 @@ type EditModal = { type: 'edit', link: Link };
 type CreateModal = { type: 'create' };
 type DeleteModal = { type: 'delete', link: Link };
 type Closed = { type: 'closed' };
-export type ModalMode = EditModal | CreateModal | DeleteModal | Closed;
+type UserModal = { type: 'auth' }
+export type ModalMode = EditModal | CreateModal | DeleteModal | UserModal | Closed;
 
 export const modalModeSt = writable<ModalMode>({ type: 'closed' });
 

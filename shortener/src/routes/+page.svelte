@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Header from '../components/Header.svelte';
 	import LinkList from '../components/LinkList.svelte';
 	import Modal from '../components/Modal/index.svelte';
@@ -6,8 +7,15 @@
 	import { linksSt, searchSt, type Link } from '../stores';
 	import { onMount } from 'svelte';
 
-  export let data: { links: Link[] };
+	export let data: { links: Link[] };
 	onMount(() => linksSt.set(data.links));
+
+	$: publicLinks = $linksSt.filter(link => !link.privileged && !link.hidden);
+	$: unlistedLinks = $linksSt.filter(link => link.hidden);
+	$: privilegedLinks = $linksSt.filter(link => link.privileged);
+
+	const { session } = $page.data;
+	const isLoggedIn = Boolean(session?.user);
 </script>
 
 <Modal />
@@ -18,7 +26,11 @@
 <br />
 
 <main>
-  <LinkList links={$linksSt} search={$searchSt} />
+  <LinkList links={publicLinks} search={$searchSt} title={isLoggedIn ? "Public Links" : "Links"} />
+  {#if isLoggedIn}
+	<LinkList links={unlistedLinks} search={$searchSt} title="Unlisted Links" description="These links will work for anyone, but not be visible on your page" />
+	<LinkList links={privilegedLinks} search={$searchSt} title="Private Links" description="These links will only work for your account and not be shown to anyone else" />
+  {/if}
 </main>
 
 <style>

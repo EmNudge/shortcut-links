@@ -1,12 +1,8 @@
 <script lang="ts">
 	import Search from './Search.svelte';
-    import { modalModeSt, searchSt } from '../stores';
+    import { searchSt } from '../stores';
     import { page } from '$app/stores';
 	import Profile from './Profile.svelte';
-
-    const handleNewLink = () => {
-        $modalModeSt = { type: 'create' };
-    };
 
     const { session } = $page.data;
 </script>
@@ -14,17 +10,12 @@
 <header>
     <div class="meta">
         <div class="brand">
-            <h1>Redirects</h1>
-            {#if session}
-                <button on:click={handleNewLink}>New Link</button>
-            {/if}
+            <h1>Rdrct</h1>
         </div>
+        <Search bind:value={$searchSt} />
         <div class="auth">
             {#if session?.user}
                 <Profile user={session.user} />
-                <form action="/auth/signout" method="POST">
-                    <button type="submit">Sign Out</button>
-                </form>
             {:else}
                 <span>Want to edit links?</span>
                 <form action="/auth/signin/github" method="POST">
@@ -34,23 +25,26 @@
             {/if}
         </div>
     </div>
-    <br />
-    <Search bind:value={$searchSt} />
 </header>
 
 <style>
     h1 {
-        font-size: 3em;
+        font-size: 2.25rem;
+        opacity: .8;
+        font-weight: 200;
     }
     header {
         margin: 0 auto;
-        max-width: 800px;
-        padding: 0 10px;
+        padding: 2rem 1rem;
 
 		position: sticky;
         top: 0;
         z-index: 2;
-        background: var(--bg);
+        background: white;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
 	}
     .brand {
         display: flex;
@@ -61,7 +55,9 @@
 	.meta {
 		display: flex;
 		justify-content: space-between;
-		padding-top: clamp(20px, 5vw, 40px);
+        align-items: center;
+        gap: 2rem;
+        width: 1200px;
 	}
     
     .auth {
