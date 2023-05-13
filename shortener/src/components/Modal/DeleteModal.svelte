@@ -3,7 +3,7 @@
 	const dispatch = createEventDispatcher();
 
 	import Base from './Base.svelte';
-	import { linksSt, modalModeSt, type Link } from '../../stores';
+	import { linksSt, modalModeSt, type Link, type Visbility } from '../../stores';
 
 	export let link: Link;
 
@@ -19,6 +19,8 @@
 			return links.filter((link) => link.name !== oldLink.name);
 		});
 	};
+
+	const visibility: Visbility = link.hidden ? 'unlisted' : link.privileged ? 'private': 'public'
 </script>
 
 {#if link}
@@ -30,6 +32,9 @@
 	
 			<dt>URL</dt>
 			<dd><a href={link.url}>{link.url}</a></dd>
+	
+			<dt>Visibility</dt>
+			<dd>{visibility}</dd>
 		</dl>
 		<div slot="footer" >
 			<button type="button" on:click={handleDelete}>Delete Link</button>

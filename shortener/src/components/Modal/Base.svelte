@@ -87,11 +87,14 @@
 		align-items: center;
 	}
 	h1 {
-		text-align: center;
-		margin-bottom: 20px;
+		margin-bottom: 2rem;
 	}
 	.close-btn {
 		box-shadow: none;
+		border: none;
+		background: none;
+		cursor: pointer;
+		padding: .5rem;
 	}
 	button img {
 		height: 16px;

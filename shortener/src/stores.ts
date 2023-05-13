@@ -1,16 +1,19 @@
 import { writable } from "svelte/store";
 
+export type Visbility = 'public' | 'unlisted' | 'private';
 export interface Link {
     name: string;
     url: string;
     privileged?: boolean;
     hidden?: boolean;
+    visibility?: Visbility;
+    category?: string;
 }
 
 export const linksSt = writable<Link[]>([]);
 
 type EditModal = { type: 'edit', link: Link };
-type CreateModal = { type: 'create' };
+type CreateModal = { type: 'create', defaultVisibility: Visbility };
 type DeleteModal = { type: 'delete', link: Link };
 type Closed = { type: 'closed' };
 type UserModal = { type: 'auth' }

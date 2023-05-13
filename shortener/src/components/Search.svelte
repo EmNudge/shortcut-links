@@ -12,16 +12,14 @@
 		display: flex;
 		border: none;
 		background: var(--bg);
-		max-width: 500px;
-		width: 1000px;
 
-		padding: 1rem 2rem;
-		border-radius: 1rem;
+		padding: .75rem 1rem;
+		border-radius: .5rem;
 	}
 
 	input {
+		font-size: 1.25rem;
 		width: 100%;
-		font-size: 1.5rem;
 		border: none;
 		outline: none;
 		background: none;

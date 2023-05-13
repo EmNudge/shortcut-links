@@ -12,5 +12,8 @@
 </Base>
 
 <style>
-
+	button {
+		font-size: 1rem;
+		padding: .5rem 2rem;
+	}
 </style>

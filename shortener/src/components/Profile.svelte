@@ -42,4 +42,10 @@
   strong {
     font-size: 1.5em;
   }
+
+  @media screen and (max-width: 850px) {
+    .name {
+      display: none;
+    }
+  }
 </style>

@@ -1,23 +1,21 @@
 <script>
 	import { modalModeSt } from '../../stores';
 
-	import EditCreateModal from './EditCreateModal.svelte';
+	import EditModal from './EditModal.svelte';
+	import CreateModal from './CreateModal.svelte';
 	import DeleteModal from './DeleteModal.svelte';
 	import AuthModal from './AuthModal.svelte';
+	import { closeModal } from '$lib/modal';
 
 	$: modalMode = $modalModeSt;
-
-	const handleCloseModal = () => {
-		$modalModeSt = { type: 'closed' };
-	};
 </script>
 
 {#if modalMode.type === 'edit'}
-	<EditCreateModal link={modalMode.link} on:close={handleCloseModal} />
+	<EditModal link={modalMode.link} on:close={closeModal} />
 {:else if modalMode.type === 'delete'}
-	<DeleteModal link={modalMode.link} on:close={handleCloseModal} />
+	<DeleteModal link={modalMode.link} on:close={closeModal} />
 {:else if modalMode.type === 'create'}
-	<EditCreateModal on:close={handleCloseModal} />
+	<CreateModal defaultVisibility={modalMode.defaultVisibility} on:close={closeModal} />
 {:else if modalMode.type === 'auth'}
-	<AuthModal on:close={handleCloseModal} />
+	<AuthModal on:close={closeModal} />
 {/if}

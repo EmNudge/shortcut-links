@@ -1,24 +1,20 @@
 <script lang="ts">
 	import LinkItem from './LinkItem.svelte';
 	import autoAnimate from '@formkit/auto-animate';
-	import { modalModeSt, type Link } from '../stores';
+	import type { Link, Visbility } from '../stores';
 	import { page } from '$app/stores';
+	import { showModal } from '$lib/modal';
 
 	export let links: Link[];
 	export let search: string;
-
-	export let title = 'Public Links';
-	export let description = 'These links are viewable by anyone with this page\'s link';
+	export let title: string;
+	export let description: string;
+	export let defaultVisibility: Visbility;
 
 	$: searchText = search.toLowerCase();
 	$: listData = links.filter(({ name, url }) =>
 		[name, url].some((t) => t.toLowerCase().includes(searchText))
 	);
-
-	const handleInteract = (index: number, type: 'edit' | 'delete') => {
-		const link = { ...links[index] };
-		modalModeSt.set({ type, link });
-	};
 
 	// need to void the return of autoAnimate due to es-lint
 	const anim = (el: HTMLElement) => void autoAnimate(el);
@@ -33,21 +29,19 @@
 					<div class="info-block">{description}</div>
 					<img src="/info.svg" alt="info">
 				</button>
-				<button on:click={() => $modalModeSt = { type: 'create' }}>
+				<button on:click={() => showModal({ type: 'create', defaultVisibility })}>
 					<img src="/plus.svg" alt="add link">
 				</button>
 			</div>
 		{/if}
     </header>
 
-	{#each listData as { name, url, privileged, hidden }, i (name)}
+	{#each listData as { name, url }, i (name)}
 		<LinkItem
 			{name}
 			{url}
-			{privileged}
-			{hidden}
-			on:edit={() => handleInteract(i, 'edit')}
-			on:delete={() => handleInteract(i, 'delete')}
+			on:edit={() => showModal({ type: 'edit', link: { ...links[i] } })}
+			on:delete={() => showModal({ type: 'delete', link: { ...links[i] } })}
 			isEditable={Boolean($page.data.session)}
 		/>
 	{:else}

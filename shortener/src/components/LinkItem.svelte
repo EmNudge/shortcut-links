@@ -4,13 +4,11 @@
 
 	export let name: string;
 	export let url: string;
-	export let privileged: boolean | undefined;
-	export let hidden: boolean | undefined;
 
 	export let isEditable = false;
 </script>
 
-<section class:privileged class:hidden>
+<section>
 	<div class="data">
 		<h2>{name}</h2>
 		<h3>
@@ -39,15 +37,6 @@
 		padding: 1rem 2rem;
 		display: grid;
 		grid-template-columns: 1fr auto;
-	}
-	.privileged {
-		border: 1px solid orange;
-	}
-	.hidden {
-		box-shadow: inset 0 0 8px #000a;
-	}
-	.hidden h2 {
-		opacity: .8;
 	}
 	h2,
 	h3 {
