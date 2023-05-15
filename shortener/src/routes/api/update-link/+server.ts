@@ -1,7 +1,7 @@
 import { isPrivilegedSession } from '../../../hooks.server';
 import { getPayload } from '$lib/getPayload';
 import { error, type RequestHandler, json } from '@sveltejs/kit';
-import type { Link } from 'src/stores';
+import type { Link, Visbility } from 'src/stores';
 import { INVALID_LINK_NAMES } from '$lib/links';
 
 const getRedirectsKV = (platform: Readonly<App.Platform>) => {
@@ -25,11 +25,13 @@ export const POST: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put } = getRedirectsKV(platform);
 
-  const { name, url, privileged, hidden } = await getPayload(request, {
+  const { name, url, privileged, hidden, visibility, category } = await getPayload(request, {
     name: 'string',
     url: 'string',
     privileged: '?boolean',
     hidden: '?boolean',
+    visibility: '?string',
+    category: '?string',
   });
 
   const linkName = name.trim().toLowerCase();
@@ -37,7 +39,18 @@ export const POST: RequestHandler = async ({ platform, request, locals }) => {
     throw error(400, 'link name is using a reserved word');
   }
 
-  await put(linkName, { name: linkName, url, privileged, hidden });
+  if (visibility && visibility !== 'public' && visibility !== 'unlisted' && visibility !== 'private') {
+    throw error(400, 'link visibility must be one of ["public", "unlisted", "private"]');
+  }
+
+  await put(linkName, {
+    name: linkName,
+    url,
+    privileged,
+    hidden,
+    visibility: visibility as Visbility | undefined,
+    category
+  });
 
   return json(`link with name "${linkName}" successfully created`, { status: 200 })
 }
@@ -49,19 +62,31 @@ export const PUT: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put, deleteItem } = getRedirectsKV(platform);
 
-  const { name, url, privileged, hidden, oldName } = await getPayload(request, {
+  const { name, url, privileged, hidden, oldName, visibility, category } = await getPayload(request, {
     name: 'string',
     oldName: 'string',
     url: 'string',
     privileged: '?boolean',
     hidden: '?boolean',
+    visibility: '?string',
+    category: '?string',
   });
 
+  if (visibility && visibility !== 'public' && visibility !== 'unlisted' && visibility !== 'private') {
+    throw error(400, 'link visibility must be one of ["public", "unlisted", "private"]');
+  }
+
   const linkName = name.trim().toLowerCase();
+  const linkObject = {
+    name: linkName, url, privileged, hidden,
+    visibility: visibility as Visbility | undefined,
+    category
+  };
+
   if (oldName !== linkName) {
-    await Promise.all([deleteItem(oldName), put(linkName, { name: linkName, url, privileged, hidden })]);
+    await Promise.all([deleteItem(oldName), put(linkName, linkObject)]);
   } else {
-    await put(linkName, { name: linkName, url, privileged, hidden })
+    await put(linkName, linkObject)
   }
 
   return json(`link with name "${linkName}" successfully updated`, { status: 200 })

@@ -12,9 +12,24 @@
 	export let defaultVisibility: Visbility;
 
 	$: searchText = search.toLowerCase();
-	$: listData = links.filter(({ name, url }) =>
+	$: filteredListData = links.filter(({ name, url }) =>
 		[name, url].some((t) => t.toLowerCase().includes(searchText))
 	);
+	$: listData = ((links) => {
+		const categorizedLinks = links.map(link => [link.category ?? '', link] as const);
+		categorizedLinks.sort((a, b) => a[0].localeCompare(b[0]));
+
+		const categories = new Map<string, Link[]>();
+		for (const [category, link] of categorizedLinks) {
+			const arr = categories.get(category) ?? [];
+			arr.push(link);
+			categories.set(category, arr);
+		}
+		return [...categories];
+	})(filteredListData);
+
+	$: console.log(filteredListData)
+	$: console.log(listData)
 
 	// need to void the return of autoAnimate due to es-lint
 	const anim = (el: HTMLElement) => void autoAnimate(el);
@@ -36,14 +51,34 @@
 		{/if}
     </header>
 
-	{#each listData as { name, url }, i (name)}
-		<LinkItem
-			{name}
-			{url}
-			on:edit={() => showModal({ type: 'edit', link: { ...links[i] } })}
-			on:delete={() => showModal({ type: 'delete', link: { ...links[i] } })}
-			isEditable={Boolean($page.data.session)}
-		/>
+	{#each listData as [category, links] (category)}
+		{#if category}
+			<dl>
+				<dt>{category}</dt>
+				<dd>
+					{#each links as link (link.name)}
+						<LinkItem
+							name={link.name}
+							url={link.url}
+							on:edit={() => showModal({ type: 'edit', link: { ...link } })}
+							on:delete={() => showModal({ type: 'delete', link: { ...link } })}
+							isEditable={Boolean($page.data.session)}
+						/>
+					{/each}
+				</dd>
+			</dl>
+			{:else}
+				{#each links as link (link.name)}
+					<LinkItem
+						name={link.name}
+						url={link.url}
+						on:edit={() => showModal({ type: 'edit', link: { ...link } })}
+						on:delete={() => showModal({ type: 'delete', link: { ...link } })}
+						isEditable={Boolean($page.data.session)}
+					/>
+				{/each}
+		{/if}
+		
 	{:else}
 		<div class="empty-section"> nothing to see here </div>
 	{/each}
@@ -93,6 +128,15 @@
 	button:hover .info-block {
 		visibility: visible;
 		opacity: 1;
+	}
+
+	dt {
+		font-weight: bold;
+	}
+	dd {
+		display: grid;
+		gap: 1rem;
+		margin: 1rem 0;
 	}
 
 	@media screen and (max-width: 550px) {

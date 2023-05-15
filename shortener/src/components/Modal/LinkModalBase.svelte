@@ -9,8 +9,8 @@
 	export let link: Link;
     export let title: string;
     export let submitButtonText: string;
-
-	let { name, url, visibility } = link;
+    
+	let { name, url, visibility, category } = link;
 	visibility ??= $modalModeSt.type === 'create' ? $modalModeSt.defaultVisibility : undefined;
 	let error = '';
 
@@ -42,10 +42,10 @@
 			return;
 		}
 		
-        dispatch('submit', { name, url: newUrl.toString(), visibility, })
+        dispatch('submit', { name, url: newUrl.toString(), visibility, category })
 	};
 
-    $: isButtonDisabled = name === link.name && url === link.url && visibility === link.visibility;
+    $: isButtonDisabled = name === link.name && url === link.url && visibility === link.visibility && category === link.category;
 </script>
 
 {#if link}
@@ -53,19 +53,23 @@
 		<form on:submit|preventDefault={handleSubmit} id="link-form">
 			<label>
 				<span>Name</span>
-				<input type="text" placeholder="name..." bind:value={name} />
+				<input type="text" required placeholder="name..." bind:value={name} />
 			</label>
 			<label>
 				<span>URL</span>
-				<input type="text" placeholder="url..." bind:value={url} />
+				<input type="text" required placeholder="url..." bind:value={url} />
 			</label>
 			<label>
 				<span>Visbility</span>
-				<select bind:value={visibility}>
+				<select required bind:value={visibility}>
 					{#each ['Public', 'Unlisted', 'Private'] as visibleState}
 						<option value={visibleState.toLowerCase()}>{visibleState}</option>
 					{/each}
 				</select>
+			</label>
+            <label>
+				<span class="optional">Cateogory</span>
+				<input type="text" placeholder="category..." bind:value={category} />
 			</label>
 		</form>
 		<div slot="footer">
@@ -107,6 +111,12 @@
         padding: .5rem 2rem;
     }
     
+    .optional:after {
+        content: '- Optional';
+        opacity: .5;
+        margin-left: .5em;
+        font-style: italic;
+    }
 	.error {
 		color: red;
 		text-align: center;
