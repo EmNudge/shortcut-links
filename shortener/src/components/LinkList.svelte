@@ -94,4 +94,11 @@
 		visibility: visible;
 		opacity: 1;
 	}
+
+	@media screen and (max-width: 550px) {
+		section {
+			margin: 1rem;
+			padding: 2rem 1rem;
+		}
+	}
 </style>

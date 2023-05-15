@@ -68,4 +68,12 @@
 	.icons button:active {
 		transform: scale(.9);
 	}
+
+	@media screen and (max-width: 350px) {
+		section {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+			justify-items: center;
+		}
+	}
 </style>
