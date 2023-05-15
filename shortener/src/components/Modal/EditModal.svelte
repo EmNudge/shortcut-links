@@ -4,17 +4,17 @@
 
 	export let link: Link;
 
-    const visibility: Visbility = link.hidden ? 'unlisted' : link.privileged ? 'private': 'public'
-    const fixedLink: Link = { ...link, visibility }
+	const visibility: Visbility = link.hidden ? 'unlisted' : link.privileged ? 'private' : 'public';
+	const fixedLink: Link = { ...link, visibility };
 
 	const handleSubmit = async (e: Event & { detail: Link }) => {
 		const oldLink = link;
 		const newLink = e.detail;
 
-        await fetch('/api/update-link', {
-            method: 'PUT',
-            body: JSON.stringify({ ...newLink, oldName: oldLink.name })
-        });
+		await fetch('/api/update-link', {
+			method: 'PUT',
+			body: JSON.stringify({ ...newLink, oldName: oldLink.name })
+		});
 		$modalModeSt = { type: 'closed' };
 
 		linksSt.update((links) => {
@@ -26,11 +26,11 @@
 </script>
 
 {#if link}
-    <LinkModalBase
-        title="Edit Link"
-        on:submit={handleSubmit}
-        on:close
-        link={fixedLink}
-        submitButtonText="Update Link"
-    />
+	<LinkModalBase
+		title="Edit Link"
+		on:submit={handleSubmit}
+		on:close
+		link={fixedLink}
+		submitButtonText="Update Link"
+	/>
 {/if}

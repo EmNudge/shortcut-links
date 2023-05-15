@@ -38,24 +38,23 @@
 		justify-content: center;
 		align-items: center;
 
-        box-shadow: 0px 4px 4px #0001;
+		box-shadow: 0px 4px 4px #0001;
 	}
 	.meta {
 		display: grid;
 		justify-content: space-between;
 		align-items: center;
-        grid-template-columns: 1fr auto;
+		grid-template-columns: 1fr auto;
 		gap: 2rem;
 		max-width: 800px;
-        width: 100%;
+		width: 100%;
 	}
 
 	@media screen and (max-width: 850px) {
-        .meta {
-            grid-template-columns: 1fr 5rem;
-        }
+		.meta {
+			grid-template-columns: 1fr 5rem;
+		}
 	}
-
 
 	.auth {
 		display: grid;
@@ -64,6 +63,6 @@
 	}
 	.auth button {
 		width: 100%;
-        padding: .25rem 2rem;
+		padding: 0.25rem 2rem;
 	}
 </style>

@@ -8,7 +8,7 @@
 	export let link: Link;
 
 	const handleDelete = async () => {
-		await fetch('/api/update-link', { 
+		await fetch('/api/update-link', {
 			method: 'DELETE',
 			body: JSON.stringify({ name: link.name })
 		});
@@ -20,23 +20,23 @@
 		});
 	};
 
-	const visibility: Visbility = link.hidden ? 'unlisted' : link.privileged ? 'private': 'public'
+	const visibility: Visbility = link.hidden ? 'unlisted' : link.privileged ? 'private' : 'public';
 </script>
 
 {#if link}
 	<Base title="Delete Link?" on:close={() => dispatch('close')}>
-		<br>
+		<br />
 		<dl>
 			<dt>Name</dt>
 			<dd>{link.name}</dd>
-	
+
 			<dt>URL</dt>
 			<dd><a href={link.url}>{link.url}</a></dd>
-	
+
 			<dt>Visibility</dt>
 			<dd>{visibility}</dd>
 		</dl>
-		<div slot="footer" >
+		<div slot="footer">
 			<button type="button" on:click={handleDelete}>Delete Link</button>
 		</div>
 	</Base>
@@ -52,7 +52,7 @@
 	dd {
 		padding: 10px;
 		word-break: break-all;
-    max-width: 400px;
+		max-width: 400px;
 	}
 	button {
 		background: #ffaaaa;

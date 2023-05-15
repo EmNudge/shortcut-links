@@ -18,7 +18,7 @@
 		css: (t: number) => `
 			backdrop-filter: blur(${t * 2}px);
 			opacity: ${t};
-		`,
+		`
 	});
 </script>
 
@@ -26,7 +26,7 @@
 	<div class="container" bind:this={divEl} transition:scale={{ duration: 150 }}>
 		<header>
 			<button class="close-btn" on:click={() => dispatch('close')}>
-				<img src="/close.svg" alt="close">
+				<img src="/close.svg" alt="close" />
 			</button>
 		</header>
 		<div class="main-centerer">
@@ -94,7 +94,7 @@
 		border: none;
 		background: none;
 		cursor: pointer;
-		padding: .5rem;
+		padding: 0.5rem;
 	}
 	button img {
 		height: 16px;

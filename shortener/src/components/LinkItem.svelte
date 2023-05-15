@@ -32,7 +32,7 @@
 
 <style>
 	section {
-		background: #F4F7FE;
+		background: #f4f7fe;
 		border-radius: 15px;
 		padding: 1rem 2rem;
 		display: grid;
@@ -43,7 +43,7 @@
 		margin: 0;
 	}
 	h2 {
-		opacity: .8;
+		opacity: 0.8;
 	}
 	h3 {
 		font-weight: 200;
@@ -52,7 +52,7 @@
 		word-break: break-all;
 	}
 	h3 a {
-		color: #8EBBFF;
+		color: #8ebbff;
 	}
 	.icons {
 		display: flex;
@@ -66,7 +66,7 @@
 		cursor: pointer;
 	}
 	.icons button:active {
-		transform: scale(.9);
+		transform: scale(0.9);
 	}
 
 	@media screen and (max-width: 350px) {

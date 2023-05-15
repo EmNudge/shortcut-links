@@ -16,7 +16,7 @@
 		[name, url].some((t) => t.toLowerCase().includes(searchText))
 	);
 	$: listData = ((links) => {
-		const categorizedLinks = links.map(link => [link.category ?? '', link] as const);
+		const categorizedLinks = links.map((link) => [link.category ?? '', link] as const);
 		categorizedLinks.sort((a, b) => a[0].localeCompare(b[0]));
 
 		const categories = new Map<string, Link[]>();
@@ -34,19 +34,19 @@
 
 <section use:anim>
 	<header>
-        <h2>{title}</h2>
+		<h2>{title}</h2>
 		{#if $page.data.session?.user}
 			<div class="buttons">
 				<button>
 					<div class="info-block">{description}</div>
-					<img src="/info.svg" alt="info">
+					<img src="/info.svg" alt="info" />
 				</button>
 				<button on:click={() => showModal({ type: 'create', defaultVisibility })}>
-					<img src="/plus.svg" alt="add link">
+					<img src="/plus.svg" alt="add link" />
 				</button>
 			</div>
 		{/if}
-    </header>
+	</header>
 
 	{#each listData as [category, links] (category)}
 		{#if category}
@@ -64,20 +64,19 @@
 					{/each}
 				</dd>
 			</dl>
-			{:else}
-				{#each links as link (link.name)}
-					<LinkItem
-						name={link.name}
-						url={link.url}
-						on:edit={() => showModal({ type: 'edit', link: { ...link } })}
-						on:delete={() => showModal({ type: 'delete', link: { ...link } })}
-						isEditable={Boolean($page.data.session)}
-					/>
-				{/each}
+		{:else}
+			{#each links as link (link.name)}
+				<LinkItem
+					name={link.name}
+					url={link.url}
+					on:edit={() => showModal({ type: 'edit', link: { ...link } })}
+					on:delete={() => showModal({ type: 'delete', link: { ...link } })}
+					isEditable={Boolean($page.data.session)}
+				/>
+			{/each}
 		{/if}
-		
 	{:else}
-		<div class="empty-section"> nothing to see here </div>
+		<div class="empty-section">nothing to see here</div>
 	{/each}
 </section>
 
@@ -93,7 +92,7 @@
 		padding: 3rem 2rem;
 	}
 	.empty-section {
-		opacity: .5;
+		opacity: 0.5;
 	}
 	header {
 		display: flex;
@@ -107,20 +106,20 @@
 	}
 	.buttons button img {
 		height: 1.25rem;
-		opacity: .5;
+		opacity: 0.5;
 	}
 	.info-block {
 		position: absolute;
 		width: 15rem;
 		transform: translate(-50%, calc(-100% - 1rem));
-		background: #ECEEF2;
+		background: #eceef2;
 		border-radius: 4px;
-		padding: .5rem;
+		padding: 0.5rem;
 		border: 1px solid white;
 
 		visibility: hidden;
 		opacity: 0;
-		transition: opacity .25s;
+		transition: opacity 0.25s;
 	}
 	button:hover .info-block {
 		visibility: visible;
@@ -129,14 +128,14 @@
 
 	dt {
 		font-weight: bold;
-		opacity: .75;
+		opacity: 0.75;
 	}
 	dd {
 		display: grid;
 		gap: 1rem;
 		margin: 1rem 0;
-		border-left: 2px solid rgb(106, 131, 211, .15);
-		padding-left: .5rem;
+		border-left: 2px solid rgb(106, 131, 211, 0.15);
+		padding-left: 0.5rem;
 	}
 
 	@media screen and (max-width: 550px) {

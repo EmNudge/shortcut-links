@@ -13,8 +13,8 @@
 		border: none;
 		background: var(--bg);
 
-		padding: .75rem 1rem;
-		border-radius: .5rem;
+		padding: 0.75rem 1rem;
+		border-radius: 0.5rem;
 	}
 
 	input {
