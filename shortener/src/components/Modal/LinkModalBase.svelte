@@ -3,7 +3,7 @@
 	const dispatch = createEventDispatcher();
 
 	import Base from './Base.svelte';
-	import { modalModeSt, type Link } from '../../stores';
+	import { modalModeSt, type Link, linksSt } from '../../stores';
 	import { INVALID_LINK_NAMES } from '$lib/links';
 	
 	export let link: Link;
@@ -45,7 +45,16 @@
         dispatch('submit', { name, url: newUrl.toString(), visibility, category })
 	};
 
-    $: isButtonDisabled = name === link.name && url === link.url && visibility === link.visibility && category === link.category;
+	$: categories = [...$linksSt.reduce((categoriesSet, link) => {
+		categoriesSet.add(link.category ?? '');
+		return categoriesSet;
+	}, new Set<string>())];
+
+    $: isButtonDisabled = 
+        name === link.name && 
+        url === link.url && 
+        visibility === link.visibility && 
+        category === link.category;
 </script>
 
 {#if link}
@@ -69,8 +78,14 @@
 			</label>
             <label>
 				<span class="optional">Cateogory</span>
-				<input type="text" placeholder="category..." bind:value={category} />
+				<input list="categories-list" type="text" placeholder="category..." bind:value={category} />
 			</label>
+
+            <datalist id="categories-list">
+                {#each categories as cat}
+                    <option value={cat}></option>
+                {/each}
+            </datalist>
 		</form>
 		<div slot="footer">
             <button type="submit" form="link-form" disabled={isButtonDisabled}

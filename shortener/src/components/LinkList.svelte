@@ -28,9 +28,6 @@
 		return [...categories];
 	})(filteredListData);
 
-	$: console.log(filteredListData)
-	$: console.log(listData)
-
 	// need to void the return of autoAnimate due to es-lint
 	const anim = (el: HTMLElement) => void autoAnimate(el);
 </script>
@@ -132,11 +129,14 @@
 
 	dt {
 		font-weight: bold;
+		opacity: .75;
 	}
 	dd {
 		display: grid;
 		gap: 1rem;
 		margin: 1rem 0;
+		border-left: 2px solid rgb(106, 131, 211, .15);
+		padding-left: .5rem;
 	}
 
 	@media screen and (max-width: 550px) {
