@@ -90,10 +90,10 @@
 				{/each}
 			</datalist>
 
-            <label>
-                <span class="optional">Description</span>
-                <textarea bind:value={description}></textarea>
-            </label>
+			<label>
+				<span class="optional">Description</span>
+				<textarea bind:value={description} />
+			</label>
 		</form>
 		<div slot="footer">
 			<button type="submit" form="link-form" disabled={isButtonDisabled}>{submitButtonText}</button>
@@ -122,10 +122,13 @@
 	input {
 		width: 400px;
 	}
-    textarea {
-        width: 100%;
-        height: 4rem;
-    }
+	textarea {
+		width: 100%;
+		height: 4rem;
+		padding: 0.5rem;
+		font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode',
+			Geneva, Verdana, sans-serif;
+	}
 	select,
 	input,
 	button {

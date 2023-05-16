@@ -89,5 +89,6 @@
 	}
 	.description {
 		padding: 1rem;
+		opacity: 0.8;
 	}
 </style>
