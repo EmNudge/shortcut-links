@@ -10,7 +10,7 @@
 	export let title: string;
 	export let submitButtonText: string;
 
-	let { name, url, visibility, category } = link;
+	let { name, url, visibility, category, description } = link;
 	visibility ??= $modalModeSt.type === 'create' ? $modalModeSt.defaultVisibility : undefined;
 	let error = '';
 
@@ -42,7 +42,7 @@
 			return;
 		}
 
-		dispatch('submit', { name, url: newUrl.toString(), visibility, category });
+		dispatch('submit', { name, url: newUrl.toString(), visibility, category, description });
 	};
 
 	$: categories = [
@@ -56,6 +56,7 @@
 		name === link.name &&
 		url === link.url &&
 		visibility === link.visibility &&
+		description === link.description &&
 		category === link.category;
 </script>
 
@@ -88,6 +89,11 @@
 					<option value={cat} />
 				{/each}
 			</datalist>
+
+            <label>
+                <span class="optional">Description</span>
+                <textarea bind:value={description}></textarea>
+            </label>
 		</form>
 		<div slot="footer">
 			<button type="submit" form="link-form" disabled={isButtonDisabled}>{submitButtonText}</button>
@@ -116,6 +122,10 @@
 	input {
 		width: 400px;
 	}
+    textarea {
+        width: 100%;
+        height: 4rem;
+    }
 	select,
 	input,
 	button {

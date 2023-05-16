@@ -57,6 +57,7 @@
 						<LinkItem
 							name={link.name}
 							url={link.url}
+							description={link.description}
 							on:edit={() => showModal({ type: 'edit', link: { ...link } })}
 							on:delete={() => showModal({ type: 'delete', link: { ...link } })}
 							isEditable={Boolean($page.data.session)}
@@ -69,6 +70,7 @@
 				<LinkItem
 					name={link.name}
 					url={link.url}
+					description={link.description}
 					on:edit={() => showModal({ type: 'edit', link: { ...link } })}
 					on:delete={() => showModal({ type: 'delete', link: { ...link } })}
 					isEditable={Boolean($page.data.session)}

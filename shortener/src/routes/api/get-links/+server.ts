@@ -21,8 +21,8 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
   const allowedLinks = isPrivileged 
     ? links 
     : links
-      .filter(link => !link.hidden && !link.privileged)
-      .map(({ name, url, category }) => ({ name, url, category }));
+      .filter(link => !link.hidden && !link.privileged && (!link.visibility || link.visibility === 'public'))
+      .map(({ name, url, category, description }) => ({ name, url, category, description }));
 
   return json(allowedLinks, { status: 200 });
 };
