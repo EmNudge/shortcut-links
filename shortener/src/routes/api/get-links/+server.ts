@@ -22,7 +22,7 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
     ? links 
     : links
       .filter(link => !link.hidden && !link.privileged)
-      .map(({ name, url, category }) => ({ name, url, category }));
+      .map(({ name, url, category, description }) => ({ name, url, category, description }));
 
   return json(allowedLinks, { status: 200 });
 };

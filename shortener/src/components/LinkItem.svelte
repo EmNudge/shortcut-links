@@ -4,6 +4,7 @@
 
 	export let name: string;
 	export let url: string;
+	export let description: string | undefined;
 
 	export let isEditable = false;
 </script>
@@ -14,6 +15,7 @@
 		<h3>
 			<a href={url}>{url}</a>
 		</h3>
+		{#if description}<hr />{/if}
 	</div>
 	<div class="icons">
 		{#if isEditable}
@@ -28,6 +30,11 @@
 			</button>
 		{/if}
 	</div>
+	{#if description}
+		<div class="description">
+			{description}
+		</div>
+	{/if}
 </section>
 
 <style>
@@ -75,5 +82,12 @@
 			gap: 1.5rem;
 			justify-items: center;
 		}
+	}
+	hr {
+		opacity: 0.15;
+		margin-top: 1rem;
+	}
+	.description {
+		padding: 1rem;
 	}
 </style>

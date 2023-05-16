@@ -25,13 +25,14 @@ export const POST: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put } = getRedirectsKV(platform);
 
-  const { name, url, privileged, hidden, visibility, category } = await getPayload(request, {
+  const { name, url, privileged, hidden, visibility, category, description } = await getPayload(request, {
     name: 'string',
     url: 'string',
     privileged: '?boolean',
     hidden: '?boolean',
     visibility: '?string',
     category: '?string',
+    description: '?string',
   });
 
   const linkName = name.trim().toLowerCase();
@@ -49,7 +50,8 @@ export const POST: RequestHandler = async ({ platform, request, locals }) => {
     privileged,
     hidden,
     visibility: visibility as Visbility | undefined,
-    category
+    category,
+    description
   });
 
   return json(`link with name "${linkName}" successfully created`, { status: 200 })
@@ -62,7 +64,7 @@ export const PUT: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put, deleteItem } = getRedirectsKV(platform);
 
-  const { name, url, privileged, hidden, oldName, visibility, category } = await getPayload(request, {
+  const { name, url, privileged, hidden, oldName, visibility, category, description } = await getPayload(request, {
     name: 'string',
     oldName: 'string',
     url: 'string',
@@ -70,6 +72,7 @@ export const PUT: RequestHandler = async ({ platform, request, locals }) => {
     hidden: '?boolean',
     visibility: '?string',
     category: '?string',
+    description: '?string',
   });
 
   if (visibility && visibility !== 'public' && visibility !== 'unlisted' && visibility !== 'private') {
@@ -80,7 +83,8 @@ export const PUT: RequestHandler = async ({ platform, request, locals }) => {
   const linkObject = {
     name: linkName, url, privileged, hidden,
     visibility: visibility as Visbility | undefined,
-    category
+    category,
+    description,
   };
 
   if (oldName !== linkName) {

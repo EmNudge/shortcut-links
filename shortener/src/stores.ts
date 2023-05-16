@@ -8,6 +8,7 @@ export interface Link {
     hidden?: boolean;
     visibility?: Visbility;
     category?: string;
+    description?: string;
 }
 
 export const linksSt = writable<Link[]>([]);
