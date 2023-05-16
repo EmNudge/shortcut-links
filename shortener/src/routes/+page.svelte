@@ -16,6 +16,7 @@
 
 	const { session } = $page.data;
 	const isLoggedIn = Boolean(session?.user);
+
 </script>
 
 <Modal />
