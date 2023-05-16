@@ -35,6 +35,9 @@
 
 			<dt>Visibility</dt>
 			<dd>{visibility}</dd>
+
+			<dt>Description</dt>
+			<dd>{link.description}</dd>
 		</dl>
 		<div slot="footer">
 			<button type="button" on:click={handleDelete}>Delete Link</button>
