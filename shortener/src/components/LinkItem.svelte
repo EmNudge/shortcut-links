@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import Popup from './Popup.svelte';
 	const dispatch = createEventDispatcher();
 
 	export let name: string;
@@ -11,11 +12,18 @@
 
 <section>
 	<div class="data">
-		<h2>{name}</h2>
+		<h2>
+			<span>{name}</span>
+			{#if description}
+				<span class="popup-container">
+					<Popup content={description} />
+					<img src="/info.svg" alt="info" />
+				</span>
+			{/if}
+		</h2>
 		<h3>
 			<a href={url}>{url}</a>
 		</h3>
-		{#if description}<hr />{/if}
 	</div>
 	<div class="icons">
 		{#if isEditable}
@@ -30,11 +38,6 @@
 			</button>
 		{/if}
 	</div>
-	{#if description}
-		<div class="description">
-			{description}
-		</div>
-	{/if}
 </section>
 
 <style>
@@ -55,7 +58,7 @@
 	h3 {
 		font-weight: 200;
 		font-size: 1rem;
-		margin-top: 10px;
+		margin-top: 0.25rem;
 		word-break: break-all;
 	}
 	h3 a {
@@ -83,12 +86,14 @@
 			justify-items: center;
 		}
 	}
-	hr {
-		opacity: 0.15;
-		margin-top: 1rem;
+
+	h2 {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
-	.description {
-		padding: 1rem;
-		opacity: 0.8;
+	.popup-container img {
+		height: 1rem;
+		opacity: 0.5;
 	}
 </style>

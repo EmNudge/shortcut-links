@@ -4,6 +4,7 @@
 	import type { Link, Visbility } from '../stores';
 	import { page } from '$app/stores';
 	import { showModal } from '$lib/modal';
+	import Popup from './Popup.svelte';
 
 	export let links: Link[];
 	export let search: string;
@@ -37,8 +38,8 @@
 		<h2>{title}</h2>
 		{#if $page.data.session?.user}
 			<div class="buttons">
-				<button>
-					<div class="info-block">{description}</div>
+				<button class="popup-container">
+					<Popup content={description} />
 					<img src="/info.svg" alt="info" />
 				</button>
 				<button on:click={() => showModal({ type: 'create', defaultVisibility })}>
@@ -109,23 +110,6 @@
 	.buttons button img {
 		height: 1.25rem;
 		opacity: 0.5;
-	}
-	.info-block {
-		position: absolute;
-		width: 15rem;
-		transform: translate(-50%, calc(-100% - 1rem));
-		background: #eceef2;
-		border-radius: 4px;
-		padding: 0.5rem;
-		border: 1px solid white;
-
-		visibility: hidden;
-		opacity: 0;
-		transition: opacity 0.25s;
-	}
-	button:hover .info-block {
-		visibility: visible;
-		opacity: 1;
 	}
 
 	dt {
