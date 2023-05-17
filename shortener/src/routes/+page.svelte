@@ -31,7 +31,7 @@
 		links={publicLinks}
 		search={$searchSt}
 		defaultVisibility="public"
-		title={isLoggedIn ? 'Public Links' : 'Links'}
+		title={isLoggedIn ? 'Public Links' : undefined}
 		description="These links are viewable by anyone with this page's link"
 	/>
 	{#if isLoggedIn}

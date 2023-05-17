@@ -11,6 +11,7 @@
 
 	.popup {
 		--bg: #c6d9ff;
+		z-index: 99;
 
 		position: absolute;
 		width: max-content;

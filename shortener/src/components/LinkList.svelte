@@ -8,7 +8,7 @@
 
 	export let links: Link[];
 	export let search: string;
-	export let title: string;
+	export let title: string | undefined;
 	export let description: string;
 	export let defaultVisibility: Visbility;
 
@@ -33,9 +33,11 @@
 	const anim = (el: HTMLElement) => void autoAnimate(el);
 </script>
 
-<section use:anim>
+<section use:anim class:with-title={title}>
 	<header>
-		<h2>{title}</h2>
+		{#if title}
+			<h2>{title}</h2>
+		{/if}
 		{#if $page.data.session?.user}
 			<div class="buttons">
 				<button class="popup-container">
@@ -92,6 +94,9 @@
 
 		background: white;
 		border-radius: 1rem;
+		padding: 2rem;
+	}
+	section.with-title {
 		padding: 3rem 2rem;
 	}
 	.empty-section {
