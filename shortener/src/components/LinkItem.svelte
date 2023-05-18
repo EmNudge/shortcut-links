@@ -94,6 +94,6 @@
 	}
 	.popup-container img {
 		height: 1rem;
-		opacity: 0.5;
+		opacity: 0.9;
 	}
 </style>

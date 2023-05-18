@@ -113,6 +113,7 @@
 		cursor: pointer;
 	}
 	.buttons button img {
+		filter: brightness(0%);
 		height: 1.25rem;
 		opacity: 0.5;
 	}
