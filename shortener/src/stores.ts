@@ -4,9 +4,7 @@ export type Visbility = 'public' | 'unlisted' | 'private';
 export interface Link {
     name: string;
     url: string;
-    privileged?: boolean;
-    hidden?: boolean;
-    visibility?: Visbility;
+    visibility: Visbility;
     category?: string;
     description?: string;
 }

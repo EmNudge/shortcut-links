@@ -20,7 +20,6 @@
 		});
 	};
 
-	const visibility: Visbility = link.hidden ? 'unlisted' : link.privileged ? 'private' : 'public';
 </script>
 
 {#if link}
@@ -34,7 +33,7 @@
 			<dd><a href={link.url}>{link.url}</a></dd>
 
 			<dt>Visibility</dt>
-			<dd>{visibility}</dd>
+			<dd>{link.visibility}</dd>
 
 			<dt>Description</dt>
 			<dd>{link.description}</dd>

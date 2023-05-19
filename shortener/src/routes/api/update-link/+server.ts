@@ -25,12 +25,10 @@ export const POST: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put } = getRedirectsKV(platform);
 
-  const { name, url, privileged, hidden, visibility, category, description } = await getPayload(request, {
+  const { name, url, visibility, category, description } = await getPayload(request, {
     name: 'string',
     url: 'string',
-    privileged: '?boolean',
-    hidden: '?boolean',
-    visibility: '?string',
+    visibility: 'string',
     category: '?string',
     description: '?string',
   });
@@ -47,9 +45,7 @@ export const POST: RequestHandler = async ({ platform, request, locals }) => {
   await put(linkName, {
     name: linkName,
     url,
-    privileged,
-    hidden,
-    visibility: visibility as Visbility | undefined,
+    visibility: visibility as Visbility,
     category,
     description
   });
@@ -64,13 +60,11 @@ export const PUT: RequestHandler = async ({ platform, request, locals }) => {
 
   const { put, deleteItem } = getRedirectsKV(platform);
 
-  const { name, url, privileged, hidden, oldName, visibility, category, description } = await getPayload(request, {
+  const { name, url, oldName, visibility, category, description } = await getPayload(request, {
     name: 'string',
     oldName: 'string',
     url: 'string',
-    privileged: '?boolean',
-    hidden: '?boolean',
-    visibility: '?string',
+    visibility: 'string',
     category: '?string',
     description: '?string',
   });
@@ -81,8 +75,8 @@ export const PUT: RequestHandler = async ({ platform, request, locals }) => {
 
   const linkName = name.trim().toLowerCase();
   const linkObject = {
-    name: linkName, url, privileged, hidden,
-    visibility: visibility as Visbility | undefined,
+    name: linkName, url,
+    visibility: visibility as Visbility,
     category,
     description,
   };

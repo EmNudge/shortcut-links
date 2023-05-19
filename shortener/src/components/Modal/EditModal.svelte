@@ -4,8 +4,7 @@
 
 	export let link: Link;
 
-	const visibility: Visbility = link.hidden ? 'unlisted' : link.privileged ? 'private' : 'public';
-	const fixedLink: Link = { ...link, visibility };
+	const linkCopy: Link = { ...link };
 
 	const handleSubmit = async (e: Event & { detail: Link }) => {
 		const oldLink = link;
@@ -30,7 +29,7 @@
 		title="Edit Link"
 		on:submit={handleSubmit}
 		on:close
-		link={fixedLink}
+		link={linkCopy}
 		submitButtonText="Update Link"
 	/>
 {/if}

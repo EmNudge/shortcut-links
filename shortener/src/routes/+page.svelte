@@ -10,9 +10,9 @@
 	export let data: { links: Link[] };
 	onMount(() => linksSt.set(data.links));
 
-	$: publicLinks = $linksSt.filter((link) => !link.privileged && !link.hidden);
-	$: unlistedLinks = $linksSt.filter((link) => link.hidden);
-	$: privilegedLinks = $linksSt.filter((link) => link.privileged);
+	$: publicLinks = $linksSt.filter((link) => link.visibility === 'public');
+	$: unlistedLinks = $linksSt.filter((link) => link.visibility === 'unlisted');
+	$: privilegedLinks = $linksSt.filter((link) => link.visibility === 'private');
 
 	const { session } = $page.data;
 	const isLoggedIn = Boolean(session?.user);
