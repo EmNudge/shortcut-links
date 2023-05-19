@@ -22,7 +22,7 @@ export const GET: RequestHandler = async ({ platform, locals }) => {
     ? links 
     : links
       .filter(link => link.visibility === 'public')
-      .map(({ name, url, category, description }) => ({ name, url, category, description }));
+      .map(({ name, url, category, description }) => ({ name, url, category, description, visibility: 'public' }));
 
   return json(allowedLinks, { status: 200 });
 };
