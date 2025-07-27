@@ -6,7 +6,6 @@ Shortcut links using Cloudflare, Svelte, & Auth.js!
 
 Edit `localhost:3000` in the routes.json file to the hosted website. Load extension unpacked in chrome://extensions.
 
-## Svelte App
+## Static shortcuts
 
-* Miniflare is used for local development.
-* Cloudflare does not send `User-Agent` in fetch requests so we need to add one manually, overriding the Github provider in Auth.js
+Bare-minimum shortcut system. Uses static HTML sites to redirect the user with a meta tag. Makes hosting cheap and updates simple
