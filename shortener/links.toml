@@ -4,6 +4,11 @@ url = "https://neal.fun/ambient-chaos/"
 description = "noise machine, sometimes useful"
 
 [[links]]
+slug = "bg-removal"
+url = "https://bg.addy.ie/"
+description = "background removal"
+
+[[links]]
 slug = "confs"
 url = "https://confs.tech"
 description = "conference website"
